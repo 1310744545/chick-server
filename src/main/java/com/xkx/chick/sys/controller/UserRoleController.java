@@ -1,6 +1,7 @@
 package com.xkx.chick.sys.controller;
 
 
+import com.xkx.chick.common.controller.BaseController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-01-21
  */
 @RestController
-@RequestMapping("/sys/user-role")
-public class UserRoleController {
+@RequestMapping("/sys/userRole")
+public class UserRoleController extends BaseController {
 
 }

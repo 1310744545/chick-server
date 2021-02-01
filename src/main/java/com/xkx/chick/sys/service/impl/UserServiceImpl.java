@@ -2,7 +2,6 @@ package com.xkx.chick.sys.service.impl;
 
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xkx.chick.common.base.R;
@@ -11,10 +10,12 @@ import com.xkx.chick.common.security.UserInfoDetail;
 import com.xkx.chick.common.security.service.UserDetailServiceImpl;
 import com.xkx.chick.common.util.JwtUtils;
 import com.xkx.chick.common.util.SecurityUtils;
-import com.xkx.chick.sys.entity.User;
+import com.xkx.chick.common.util.StringUtils;
+import com.xkx.chick.sys.pojo.entity.User;
 import com.xkx.chick.sys.mapper.UserMapper;
 import com.xkx.chick.sys.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,6 +46,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     UserDetailServiceImpl userDetailService;
     @Autowired
     private JwtUtils jwtUtils;
+    @Value("${jwt.head}")
+    private String head;
 
     /**
      * 查询是否存在该用户
@@ -72,13 +77,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     /**
      * 登录
-     *
-     * @param username 账号
+     *  @param username 账号
      * @param password 密码
+     * @param request
      */
     @Override
-    public R<String> login(String username, String password) {
-
+    public R<HashMap> login(String username, String password, String code, HttpServletRequest request) {
+        //校验验证码
+        String rightCode = (String)request.getSession().getAttribute("rightCode");
+        if (StringUtils.isEmpty(rightCode)||!rightCode.equalsIgnoreCase(code)){
+            return R.failed("验证码输入错误,请重新输入");
+        }
         //构造token
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
 
@@ -94,7 +103,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         //生成token
         String token = jwtUtils.generateToken((UserInfoDetail) userDetails);
 
-        return R.ok(token);
+        HashMap<String, String> tokenCarry = new HashMap<>();
+        tokenCarry.put("head", head);
+        tokenCarry.put("token", token);
+        return R.ok(tokenCarry, "登陆成功");
     }
 
     /**

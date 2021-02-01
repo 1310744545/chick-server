@@ -1,6 +1,6 @@
 package com.xkx.chick.sys.service;
 
-import com.xkx.chick.sys.entity.UserRole;
+import com.xkx.chick.sys.pojo.entity.UserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

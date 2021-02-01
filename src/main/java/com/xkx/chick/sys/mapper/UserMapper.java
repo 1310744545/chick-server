@@ -1,6 +1,6 @@
 package com.xkx.chick.sys.mapper;
 
-import com.xkx.chick.sys.entity.User;
+import com.xkx.chick.sys.pojo.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

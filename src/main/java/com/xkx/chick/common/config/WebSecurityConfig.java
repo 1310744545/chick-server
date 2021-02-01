@@ -3,7 +3,7 @@ package com.xkx.chick.common.config;
 import com.xkx.chick.common.security.filter.JwtAuthenticationTokenFilter;
 import com.xkx.chick.common.security.handle.JwtAuthenticationEntryPoint;
 import com.xkx.chick.common.security.service.UserDetailServiceImpl;
-import com.xkx.chick.sys.entity.Menu;
+import com.xkx.chick.sys.pojo.entity.Menu;
 import com.xkx.chick.sys.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

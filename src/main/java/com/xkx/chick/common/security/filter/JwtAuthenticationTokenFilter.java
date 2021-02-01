@@ -4,6 +4,7 @@ import com.xkx.chick.common.security.UserInfoDetail;
 import com.xkx.chick.common.util.JwtUtils;
 import io.jsonwebtoken.Jwt;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,14 +34,18 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Resource
     JwtUtils jwtUtils;
+    @Value("${jwt.head}")
+    private String head;
+
 
     //每次请求都会执行一次,进行鉴权
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String JwtToken = request.getHeader(jwtUtils.getHeader());
-        //token不为空时
-        if (!StringUtils.isEmpty(JwtToken) && jwtUtils.isTokenExpired(JwtToken)){
-            String username = jwtUtils.getUsernameFromToken(JwtToken);
+        //token不为空,未过期,以head开头
+        if (!StringUtils.isEmpty(JwtToken) && jwtUtils.isTokenExpired(JwtToken) && JwtToken.startsWith(head)){
+            //token减去头部分
+            String username = jwtUtils.getUsernameFromToken(JwtToken.substring(head.length()));
             //用户名不为空,且还没有进行认证的
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
                 //获取token中的权限

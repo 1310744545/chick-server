@@ -1,6 +1,6 @@
 package com.xkx.chick.sys.mapper;
 
-import com.xkx.chick.sys.entity.RoleMenu;
+import com.xkx.chick.sys.pojo.entity.RoleMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

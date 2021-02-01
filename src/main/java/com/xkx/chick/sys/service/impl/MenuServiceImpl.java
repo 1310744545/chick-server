@@ -1,6 +1,6 @@
 package com.xkx.chick.sys.service.impl;
 
-import com.xkx.chick.sys.entity.Menu;
+import com.xkx.chick.sys.pojo.entity.Menu;
 import com.xkx.chick.sys.mapper.MenuMapper;
 import com.xkx.chick.sys.service.IMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

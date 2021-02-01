@@ -1,4 +1,4 @@
-package com.xkx.chick.sys.entity;
+package com.xkx.chick.sys.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;

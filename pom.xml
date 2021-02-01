@@ -144,6 +144,14 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <!-- 相关工具类end -->
+        <!-- 验证码 start-->
+        <dependency>
+            <groupId>com.github.axet</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>0.0.9</version>
+        </dependency>
+        <!-- 验证码 end-->
+
 
         <!--测试相关 start-->
         <dependency>

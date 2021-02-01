@@ -169,8 +169,8 @@ public class JwtUtils {
         Claims claims;
         try {
             claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-            System.out.println(claims.getExpiration());
-            System.out.println(new Date());
+//            System.out.println(claims.getExpiration());
+//            System.out.println(new Date());
         } catch (ExpiredJwtException e) {
 
             //e.printStackTrace() 当令牌过期 会抛ExpiredJwtException异常

@@ -2,7 +2,7 @@ package com.xkx.chick.common.security.service;
 
 
 import com.xkx.chick.common.security.UserInfoDetail;
-import com.xkx.chick.sys.entity.User;
+import com.xkx.chick.sys.pojo.entity.User;
 import com.xkx.chick.sys.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

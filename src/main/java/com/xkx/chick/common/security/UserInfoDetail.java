@@ -2,7 +2,7 @@ package com.xkx.chick.common.security;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.xkx.chick.common.constant.CommonConstants;
-import com.xkx.chick.sys.entity.User;
+import com.xkx.chick.sys.pojo.entity.User;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
