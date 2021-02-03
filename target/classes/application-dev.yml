@@ -3,6 +3,7 @@ jwt:
   secret: xkxxkx
   #token有效期三十天
   expiration: 2592000000
+  head: "Bearer "
 
 
 spring:
@@ -11,13 +12,13 @@ spring:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
-      password: root
+      password: qq10086..
       url: jdbc:mysql://127.0.0.1:3306/chick?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true&autoReconnect=true
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
         login-username: root
-        login-password: root
+        login-password: qq10086..
         allow:
       filter:
         stat:
