@@ -1,5 +1,6 @@
 package com.xkx.chick.web.controller;
 
+import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.util.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,19 +16,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TestController {
 
     @PostMapping("/add")
-    public String add(){
-        return "增加信息";
+    public R add(){
+        return R.ok("这里是add的data","增加信息");
     }
     @PostMapping("/remove")
-    public String remove(){
-        return "删除信息";
+    public R remove(){
+        return R.ok("这里是remove的data","删除信息");
+    }
+    @PostMapping("/test")
+    public R test(){
+        return R.ok("这里是test的data","test信息");
     }
     @PostMapping("/update")
-    public String update(){
-        return "修改信息";
+    public R update() {
+        return R.ok("这里是update的data","修改信息");
     }
     @GetMapping("/get")
-    public String get(){
-        return "获取信息";
+    public R get(){
+        return R.ok("这里是get的data","获取信息");
     }
 }

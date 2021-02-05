@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.xkx.chick.common.domin.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,7 +21,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_user")
-public class User implements Serializable {
+public class User extends BaseEntity implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -63,16 +65,6 @@ public class User implements Serializable {
      * 最近一次登录时间
      */
     private LocalDateTime lastLoginTime;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
 
     /**
      * 是否逻辑删除 1是0否
