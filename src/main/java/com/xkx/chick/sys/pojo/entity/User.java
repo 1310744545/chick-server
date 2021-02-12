@@ -42,9 +42,19 @@ public class User extends BaseEntity implements Serializable{
     private String password;
 
     /**
-     * 名称
+     * 名字
      */
     private String name;
+
+    /**
+     * 性别
+     */
+    private String sex;
+
+    /**
+     * 出生日期
+     */
+    private String birthday;
 
     /**
      * 手机号
@@ -62,6 +72,11 @@ public class User extends BaseEntity implements Serializable{
     private String lockFlag;
 
     /**
+     * 是否禁用 1是0否
+     */
+    private String enabledFlag;
+
+    /**
      * 最近一次登录时间
      */
     private LocalDateTime lastLoginTime;
@@ -71,5 +86,8 @@ public class User extends BaseEntity implements Serializable{
      */
     private String delFlag;
 
-
+    /**
+     * 是头像地址
+     */
+    private String headPortraitUrl;
 }

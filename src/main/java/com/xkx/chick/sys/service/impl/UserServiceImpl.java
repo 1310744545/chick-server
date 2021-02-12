@@ -1,8 +1,10 @@
 package com.xkx.chick.sys.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.constant.CommonConstants;
@@ -11,12 +13,15 @@ import com.xkx.chick.common.security.service.UserDetailServiceImpl;
 import com.xkx.chick.common.util.JwtUtils;
 import com.xkx.chick.common.util.SecurityUtils;
 import com.xkx.chick.common.util.StringUtils;
+import com.xkx.chick.sys.pojo.entity.Role;
 import com.xkx.chick.sys.pojo.entity.User;
 import com.xkx.chick.sys.mapper.UserMapper;
 import com.xkx.chick.sys.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -76,6 +81,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     /**
+     * 根据用户ID获取用户角色
+     *
+     * @param username 用户名
+     * @return 用户角色
+     */
+    @Override
+    public List<Role> getUserRole(String username) {
+        return baseMapper.selectUserRole(username);
+    }
+
+    /**
      * 登录
      *  @param username 账号
      * @param password 密码
@@ -94,6 +110,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         //验证用户信息
         try{
             Authentication authentication = authenticationManager.authenticate(upToken);
+        }catch (DisabledException e){
+            return R.failed("账户已被禁用");
+        }catch (LockedException e){
+            return R.failed("账户已被锁定");
         }catch (AuthenticationException e){
             return R.failed("用户名或密码不正确");
         }
@@ -122,4 +142,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         return R.ok();
     }
+
 }

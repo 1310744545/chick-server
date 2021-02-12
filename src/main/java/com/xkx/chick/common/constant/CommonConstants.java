@@ -24,4 +24,9 @@ public interface CommonConstants {
      */
     String ACCESS_IS_DENIED = "权限不足";
     String UNAUTHORIZED = "用户未登录,需登录";
+
+    /**
+     * 最大姓名数量
+     */
+    int MAX_NAME_LENGTH = 50;
 }

@@ -17,7 +17,7 @@ import java.io.Serializable;
 /**
  * @ClassName JwtAuthenticationEntryPoint
  * @Description 认证失败处理类
- * @Author 李蕊
+ * @Author 肖可欣
  * @Date 2020/10/25 18:14
  * @Version 1.0
  */

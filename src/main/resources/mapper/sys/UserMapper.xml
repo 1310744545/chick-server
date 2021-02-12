@@ -15,4 +15,17 @@
         WHERE
         sys_user.username = #{username}
     </select>
+
+    <select id="selectUserRole" resultType="com.xkx.chick.sys.pojo.entity.Role">
+        SELECT
+            sys_role.*
+        FROM
+            sys_role
+                JOIN sys_user_role ON sys_role.role_id = sys_user_role.role_id
+                JOIN sys_user ON sys_user_role.user_id = sys_user.user_id
+        WHERE
+            sys_user.username = #{username}
+--           AND sys_user.del_flag = '0'
+          AND sys_role.del_flag = '0'
+    </select>
 </mapper>

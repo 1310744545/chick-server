@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationManagerBuilder
                 //  设置userDetailService
                 .userDetailsService(userDetailService)
-                //  使用BCrypt进行密码hsah
+                //  使用BCrypt进行密码hash
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -85,6 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         HttpMethod.GET,
+//                        HttpMethod.POST,
                         "/*.html",
                         "/**/*.html",
                         "/**/*.css",
@@ -93,7 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**",
                         "/**/**",
                         "/**/**/**"
-                ).permitAll()
+                ).permitAll().and().authorizeRequests()
 //                .antMatchers(HttpMethod.GET,"/**").permitAll()
                 .antMatchers("/user/login").anonymous()
                 .and()

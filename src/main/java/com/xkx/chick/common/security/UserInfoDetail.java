@@ -114,6 +114,9 @@ public class UserInfoDetail implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        if (ObjectUtil.isNull(user)) {
+            return true;
+        }
+        return StringUtils.endsWithIgnoreCase(CommonConstants.NO, user.getEnabledFlag());
     }
 }

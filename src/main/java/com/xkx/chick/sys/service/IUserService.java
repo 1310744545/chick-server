@@ -1,6 +1,8 @@
 package com.xkx.chick.sys.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xkx.chick.common.base.R;
+import com.xkx.chick.sys.pojo.entity.Role;
 import com.xkx.chick.sys.pojo.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -25,6 +27,14 @@ public interface IUserService extends IService<User> {
     User getUserByUserName(String username);
 
     /**
+     * 根据用户ID获取用户角色
+     *
+     * @param username 用户名
+     * @return 用户角色
+     */
+    List<Role> getUserRole(String username);
+
+    /**
      * 查询用户的所有权限
      * @param username
      * @return
@@ -47,4 +57,5 @@ public interface IUserService extends IService<User> {
      * @return
      */
     R logout();
+
 }
