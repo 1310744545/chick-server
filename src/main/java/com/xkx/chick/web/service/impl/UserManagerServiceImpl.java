@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xkx.chick.common.base.R;
+import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.util.SecurityUtils;
 import com.xkx.chick.common.util.StringUtils;
 import com.xkx.chick.sys.mapper.UserMapper;
@@ -34,13 +36,43 @@ public class UserManagerServiceImpl extends ServiceImpl<UserManagerMapper, User>
                 .ne(User::getUserId, userId)
                 .eq(User::getDelFlag, delFlag)
                 .orderByDesc(User::getCreateDate);
+        //3.添加关键字
         if (StringUtils.isNotBlank(keyword)) {
             wrapper.and(wr -> wr.like(User::getName, keyword)
                     .or().like(User::getUsername, keyword)
                     .or().like(User::getEmail, keyword)
                     .or().like(User::getPhone, keyword));
         }
-        Page<User> userList = baseMapper.selectPage(validPage, wrapper);
-        return userList;
+        return baseMapper.selectPage(validPage, wrapper);
+    }
+
+    @Override
+    public R luckOrUnlock(Integer userId, String lockFlag) {
+        int update = baseMapper.update(null, Wrappers.<User>lambdaUpdate()
+                .eq(User::getUserId, userId)
+                .set(User::getLockFlag, CommonConstants.LOCK_FLAG.equals(lockFlag) ? CommonConstants.UNLOCK_FLAG:CommonConstants.LOCK_FLAG));
+
+        if (update > 0 && CommonConstants.LOCK_FLAG.equals(lockFlag)){
+            return R.ok("锁定成功");
+        }else if (update > 0 && CommonConstants.UNLOCK_FLAG.equals(lockFlag)){
+            return R.ok("解锁成功");
+        }else {
+            return R.failed("系统错误,请联系站长");
+        }
+    }
+
+    @Override
+    public R enabledOrUnEnabled(Integer userId, String enabledFlag) {
+        int update = baseMapper.update(null, Wrappers.<User>lambdaUpdate()
+                .eq(User::getUserId, userId)
+                .set(User::getEnabledFlag, CommonConstants.ENABLED_FLAG.equals(enabledFlag) ? CommonConstants.UN_ENABLED_FLAG:CommonConstants.ENABLED_FLAG));
+
+        if (update > 0 && CommonConstants.ENABLED_FLAG.equals(enabledFlag)){
+            return R.ok("禁用成功");
+        }else if (update > 0 && CommonConstants.UN_ENABLED_FLAG.equals(enabledFlag)){
+            return R.ok("解禁成功");
+        }else {
+            return R.failed("系统错误,请联系站长");
+        }
     }
 }

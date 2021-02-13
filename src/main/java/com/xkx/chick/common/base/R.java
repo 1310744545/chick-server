@@ -62,6 +62,10 @@ public class R<T> implements Serializable {
         return restResult(data, CommonConstants.SUCCESS, msg);
     }
 
+    public static <T> R<T> ok(String msg) {
+        return restResult(null, CommonConstants.SUCCESS, msg);
+    }
+
     public static <T> R<T> failed() {
         return restResult(null, CommonConstants.FAIL, "操作失败");
     }

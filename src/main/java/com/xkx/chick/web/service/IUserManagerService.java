@@ -2,6 +2,7 @@ package com.xkx.chick.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xkx.chick.common.base.R;
 import com.xkx.chick.sys.pojo.entity.User;
 
 /**
@@ -20,4 +21,23 @@ public interface IUserManagerService extends IService<User> {
      * @return 分页列表
      */
     Page<User> list(Page<User> validPage, String keyword, String delFlag);
+
+    /**
+     * 锁定或解锁
+     *
+     * @param userId 用户id
+     * @param lockFlag 锁定标记
+     * @return R
+     */
+    R luckOrUnlock(Integer userId, String lockFlag);
+
+    /**
+     * 禁用与解禁
+     *
+     * @param userId 用户id
+     * @param enabledFlag 禁用标记
+     * @return R
+     */
+    R enabledOrUnEnabled(Integer userId, String enabledFlag);
+
 }

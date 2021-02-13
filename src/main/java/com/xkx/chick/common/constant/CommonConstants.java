@@ -29,4 +29,16 @@ public interface CommonConstants {
      * 最大姓名数量
      */
     int MAX_NAME_LENGTH = 50;
+
+    /**
+     * 锁定标记
+     */
+    String LOCK_FLAG = "0";
+    String UNLOCK_FLAG = "1";
+
+    /**
+     * 禁用标记
+     */
+    String ENABLED_FLAG = "0";
+    String UN_ENABLED_FLAG = "1";
 }

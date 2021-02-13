@@ -3,6 +3,7 @@ jwt:
   secret: xkxxkx
   #token有效期三十天
   expiration: 2592000000
+#  expiration: 10000
   head: "Bearer "
 
 
@@ -43,9 +44,3 @@ logging:
     com.xkx.chick.Application: INFO
     org.thymeleaf: INFO
 
-alioss:
-  endpoint: oss-cn-beijing.aliyuncs.com
-  accessKeyId: LTAI4GASAoWcBMCDJgYuhcva
-  accessKeySecret: 0MWmVQ0ek1JEbALQKarDxucYqrvp7J
-  bucketName: chickweb
-  headPortrait: headPortrait/
