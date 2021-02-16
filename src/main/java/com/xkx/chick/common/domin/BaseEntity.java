@@ -23,27 +23,31 @@ public class BaseEntity {
     /**
      * '创建者'
      */
-    @TableField(fill = FieldFill.INSERT)
-    private Long createBy;
+    @TableField(value = "create_by", fill = FieldFill.INSERT)
+    private String createBy;
 
     /**
      * '创建时间'
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @TableField(fill = FieldFill.INSERT)
+    @TableField(value = "create_Date", fill = FieldFill.INSERT)
     private LocalDateTime createDate;
 
     /**
      * '更新者'
      */
-    @TableField(fill = FieldFill.UPDATE)
-    private Long updateBy;
+    @TableField(value = "update_by", fill = FieldFill.UPDATE)
+    private String updateBy;
 
     /**
      * '更新时间'
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "update_Date", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateDate;
 
+    /**
+     * 是否逻辑删除 1是0否
+     */
+    private String delFlag;
 }

@@ -143,4 +143,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return R.ok();
     }
 
+    @Override
+    public String getUserNameByUserId(String userId) {
+        return userMapper.getUserNameByUserId(userId);
+    }
+
 }

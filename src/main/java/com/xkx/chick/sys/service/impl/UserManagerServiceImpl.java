@@ -1,4 +1,4 @@
-package com.xkx.chick.web.service.impl;
+package com.xkx.chick.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -8,10 +8,9 @@ import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.util.SecurityUtils;
 import com.xkx.chick.common.util.StringUtils;
-import com.xkx.chick.sys.mapper.UserMapper;
 import com.xkx.chick.sys.pojo.entity.User;
-import com.xkx.chick.web.mapper.UserManagerMapper;
-import com.xkx.chick.web.service.IUserManagerService;
+import com.xkx.chick.sys.mapper.UserManagerMapper;
+import com.xkx.chick.sys.service.IUserManagerService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -47,7 +46,7 @@ public class UserManagerServiceImpl extends ServiceImpl<UserManagerMapper, User>
     }
 
     @Override
-    public R luckOrUnlock(Integer userId, String lockFlag) {
+    public R luckOrUnlock(String userId, String lockFlag) {
         int update = baseMapper.update(null, Wrappers.<User>lambdaUpdate()
                 .eq(User::getUserId, userId)
                 .set(User::getLockFlag, CommonConstants.LOCK_FLAG.equals(lockFlag) ? CommonConstants.UNLOCK_FLAG:CommonConstants.LOCK_FLAG));
@@ -62,7 +61,7 @@ public class UserManagerServiceImpl extends ServiceImpl<UserManagerMapper, User>
     }
 
     @Override
-    public R enabledOrUnEnabled(Integer userId, String enabledFlag) {
+    public R enabledOrUnEnabled(String userId, String enabledFlag) {
         int update = baseMapper.update(null, Wrappers.<User>lambdaUpdate()
                 .eq(User::getUserId, userId)
                 .set(User::getEnabledFlag, CommonConstants.ENABLED_FLAG.equals(enabledFlag) ? CommonConstants.UN_ENABLED_FLAG:CommonConstants.ENABLED_FLAG));
@@ -71,6 +70,22 @@ public class UserManagerServiceImpl extends ServiceImpl<UserManagerMapper, User>
             return R.ok("禁用成功");
         }else if (update > 0 && CommonConstants.UN_ENABLED_FLAG.equals(enabledFlag)){
             return R.ok("解禁成功");
+        }else {
+            return R.failed("系统错误,请联系站长");
+        }
+    }
+
+
+    @Override
+    public R deleteOrRenew(String userId, String delFlag) {
+        int update = baseMapper.update(null, Wrappers.<User>lambdaUpdate()
+                .eq(User::getUserId, userId)
+                .set(User::getDelFlag, CommonConstants.DELETE_FLAG.equals(delFlag) ? CommonConstants.UN_DELETE_FLAG:CommonConstants.DELETE_FLAG));
+
+        if (update > 0 && CommonConstants.DELETE_FLAG.equals(delFlag)){
+            return R.ok("删除成功");
+        }else if (update > 0 && CommonConstants.UN_DELETE_FLAG.equals(delFlag)){
+            return R.ok("恢复成功");
         }else {
             return R.failed("系统错误,请联系站长");
         }

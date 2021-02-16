@@ -41,4 +41,10 @@ public interface CommonConstants {
      */
     String ENABLED_FLAG = "0";
     String UN_ENABLED_FLAG = "1";
+
+    /**
+     * 删除标记
+     */
+    String DELETE_FLAG = "0";
+    String UN_DELETE_FLAG = "1";
 }

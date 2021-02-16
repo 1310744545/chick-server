@@ -3,7 +3,7 @@ package com.xkx.chick.common.security.filter;
 
 import com.xkx.chick.common.security.UserInfoDetail;
 import com.xkx.chick.common.util.JwtUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.xkx.chick.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +17,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.soap.Addressing;
 import java.io.IOException;
 import java.util.List;
 

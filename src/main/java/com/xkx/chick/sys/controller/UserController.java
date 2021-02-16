@@ -53,18 +53,19 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "登录", httpMethod = "POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "loginUserDTO", value = "登录用户主体", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "request", value = "请求体", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query"),
     })
     @PostMapping("/login")
-    public R login(@Valid @RequestBody LoginUserDTO loginUserDTO, HttpServletRequest request) {
-        if (StringUtils.isAnyBlank(loginUserDTO.getUsername(), loginUserDTO.getPassword())) {
+    public R login(String username, String password, String code, HttpServletRequest request) {
+        if (StringUtils.isAnyBlank(username, password)) {
             return R.failed("用户名和密码不能为空");
         }
-        if (StringUtils.isAnyBlank(loginUserDTO.getCode())) {
+        if (StringUtils.isAnyBlank(code)) {
             return R.failed("验证码不能为空");
         }
-        return userService.login(loginUserDTO.getUsername(), loginUserDTO.getPassword(), loginUserDTO.getCode(), request);
+        return userService.login(username, password, code, request);
     }
 
     @ApiOperation(value = "退出登录", httpMethod = "GET")

@@ -1,4 +1,4 @@
-package com.xkx.chick.web.controller;
+package com.xkx.chick.sys.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xkx.chick.common.base.R;
@@ -6,7 +6,7 @@ import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.util.PageUtils;
 import com.xkx.chick.common.util.StringUtils;
 import com.xkx.chick.sys.pojo.entity.User;
-import com.xkx.chick.web.service.IUserManagerService;
+import com.xkx.chick.sys.service.IUserManagerService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * @ClassName UserManagerController
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user/manager")
 public class UserManagerController {
-    @Autowired
+    @Resource
     private IUserManagerService userManagerService;
 
 
@@ -57,7 +59,7 @@ public class UserManagerController {
     })
     @PostMapping("/luckOrUnlock")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public R luckOrUnlock(Integer userId, String lockFlag) {
+    public R luckOrUnlock(String userId, String lockFlag) {
         if (StringUtils.isEmpty(lockFlag) || userId == null){
             return R.failed("锁定标记或用户id为空");
         }
@@ -72,10 +74,24 @@ public class UserManagerController {
     })
     @PostMapping("/enabledOrUnEnabled")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public R enabledOrUnEnabled(Integer userId, String enabledFlag) {
+    public R enabledOrUnEnabled(String userId, String enabledFlag) {
         if (StringUtils.isEmpty(enabledFlag) || userId == null){
             return R.failed("禁用标记或用户id为空");
         }
         return userManagerService.enabledOrUnEnabled(userId, enabledFlag);
+    }
+
+    @ApiOperation(value = "删除或恢复用户", position = 1, httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "userId", value = "用户id", required = true),
+            @ApiImplicitParam(paramType = "query", name = "delFlag", value = "当前删除状态", required = true),
+    })
+    @PostMapping("/deleteOrRenew")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public R deleteOrRenew(String userId, String delFlag) {
+        if (userId == null){
+            return R.failed("禁用标记或用户id为空");
+        }
+        return userManagerService.deleteOrRenew(userId, delFlag);
     }
 }

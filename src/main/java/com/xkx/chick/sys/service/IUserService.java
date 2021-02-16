@@ -58,4 +58,11 @@ public interface IUserService extends IService<User> {
      */
     R logout();
 
+    /**
+     * 根据用户id获取用户名
+     * @param userId
+     * @return
+     */
+    String getUserNameByUserId(String userId);
+
 }

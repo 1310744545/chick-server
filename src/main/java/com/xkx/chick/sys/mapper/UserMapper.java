@@ -34,4 +34,12 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 用户角色
      */
     List<Role> selectUserRole(String username);
+
+    /**
+     * 根据用户ID获取用户名
+     *
+     * @param userId 用户ID
+     * @return 用户角色
+     */
+    String getUserNameByUserId(String userId);
 }

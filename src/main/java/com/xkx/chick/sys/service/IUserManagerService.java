@@ -1,4 +1,4 @@
-package com.xkx.chick.web.service;
+package com.xkx.chick.sys.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,6 +18,7 @@ public interface IUserManagerService extends IService<User> {
      *
      * @param validPage 分页信息
      * @param keyword   关键字
+     * @param delFlag   删除标记
      * @return 分页列表
      */
     Page<User> list(Page<User> validPage, String keyword, String delFlag);
@@ -29,7 +30,7 @@ public interface IUserManagerService extends IService<User> {
      * @param lockFlag 锁定标记
      * @return R
      */
-    R luckOrUnlock(Integer userId, String lockFlag);
+    R luckOrUnlock(String userId, String lockFlag);
 
     /**
      * 禁用与解禁
@@ -38,6 +39,13 @@ public interface IUserManagerService extends IService<User> {
      * @param enabledFlag 禁用标记
      * @return R
      */
-    R enabledOrUnEnabled(Integer userId, String enabledFlag);
+    R enabledOrUnEnabled(String userId, String enabledFlag);
 
+    /**
+     * 删除或恢复用户
+     *
+     * @param userId 用户id
+     * @return R
+     */
+    R deleteOrRenew(String userId, String delFlag);
 }

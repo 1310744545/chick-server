@@ -82,11 +82,6 @@ public class User extends BaseEntity implements Serializable{
     private LocalDateTime lastLoginTime;
 
     /**
-     * 是否逻辑删除 1是0否
-     */
-    private String delFlag;
-
-    /**
      * 是头像地址
      */
     private String headPortraitUrl;

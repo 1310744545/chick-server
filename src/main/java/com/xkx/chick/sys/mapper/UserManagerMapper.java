@@ -1,4 +1,4 @@
-package com.xkx.chick.web.mapper;
+package com.xkx.chick.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xkx.chick.sys.pojo.entity.Role;
