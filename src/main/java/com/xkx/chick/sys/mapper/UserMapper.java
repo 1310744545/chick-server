@@ -41,5 +41,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @param userId 用户ID
      * @return 用户角色
      */
-    String getUserNameByUserId(String userId);
+    String getNameByUserId(String userId);
 }

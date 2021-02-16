@@ -26,7 +26,7 @@ public class UserInfoDetail implements UserDetails {
     /**
      * id
      */
-    private Integer userId;
+    private String userId;
 
     /**
      * 账号
@@ -41,7 +41,7 @@ public class UserInfoDetail implements UserDetails {
     public UserInfoDetail() {
     }
 
-    public UserInfoDetail(Integer userId, String userName) {
+    public UserInfoDetail(String userId, String userName) {
         this.userId = userId;
         this.userName = userName;
     }

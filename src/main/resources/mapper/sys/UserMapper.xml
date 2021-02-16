@@ -23,7 +23,7 @@
           AND sys_role.del_flag = '0'
     </select>
 
-    <select id="getUserNameByUserId" resultType="String">
+    <select id="getNameByUserId" resultType="String">
         SELECT `name`
         FROM sys_user
         WHERE sys_user.user_id = #{userId}

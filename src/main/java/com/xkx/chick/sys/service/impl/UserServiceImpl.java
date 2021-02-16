@@ -26,11 +26,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * <p>
@@ -43,19 +47,22 @@ import java.util.List;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    @Autowired
+    @Resource
     private AuthenticationManager authenticationManager;
-    @Autowired
+    @Resource
     private UserMapper userMapper;
-    @Autowired
+    @Resource
     UserDetailServiceImpl userDetailService;
-    @Autowired
+    @Resource
     private JwtUtils jwtUtils;
     @Value("${jwt.head}")
     private String head;
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 查询是否存在该用户
+     *
      * @param username
      * @return user
      */
@@ -64,7 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = baseMapper.selectOne(Wrappers.<User>lambdaQuery()
                 .eq(User::getUsername, username)
                 .eq(User::getDelFlag, CommonConstants.NO));
-        if (ObjectUtils.isNull(user)){
+        if (ObjectUtils.isNull(user)) {
             return null;
         }
         return user;
@@ -72,6 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     /**
      * 查询用户的所有权限
+     *
      * @param username
      * @return
      */
@@ -93,28 +101,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     /**
      * 登录
-     *  @param username 账号
+     *
+     * @param username 账号
      * @param password 密码
      * @param request
      */
     @Override
     public R<HashMap> login(String username, String password, String code, HttpServletRequest request) {
         //校验验证码
-        String rightCode = (String)request.getSession().getAttribute("rightCode");
-        if (StringUtils.isEmpty(rightCode)||!rightCode.equalsIgnoreCase(code)){
+        String rightCode = (String) request.getSession().getAttribute("rightCode");
+        if (StringUtils.isEmpty(rightCode) || !rightCode.equalsIgnoreCase(code)) {
             return R.failed("验证码输入错误,请重新输入");
         }
         //构造token
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
 
         //验证用户信息
-        try{
+        try {
             Authentication authentication = authenticationManager.authenticate(upToken);
-        }catch (DisabledException e){
+        } catch (DisabledException e) {
             return R.failed("账户已被禁用");
-        }catch (LockedException e){
+        } catch (LockedException e) {
             return R.failed("账户已被锁定");
-        }catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             return R.failed("用户名或密码不正确");
         }
 
@@ -127,6 +136,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         tokenCarry.put("head", head);
         tokenCarry.put("token", token);
         return R.ok(tokenCarry, "登陆成功");
+    }
+
+    @Override
+    public R register(String username, String password) {
+        List<User> userCount = baseMapper.selectList(Wrappers.<User>lambdaQuery()
+                .eq(User::getUsername, username));
+        if (userCount.size() > 0){
+            return R.failed("该用户名已存在");
+        }
+        String encode = passwordEncoder.encode(password);
+        User user = new User();
+        user.setUserId(UUID.randomUUID().toString());
+        user.setUsername(username);
+        user.setPassword(encode);
+        int insert = baseMapper.insert(user);
+        if (insert > 0) {
+            return R.ok("注册成功");
+        } else {
+            return R.failed("注册失败,系统错误");
+        }
     }
 
     /**
@@ -143,9 +172,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return R.ok();
     }
 
+    /**
+     * 通过用户id获取用户名字
+     */
     @Override
-    public String getUserNameByUserId(String userId) {
-        return userMapper.getUserNameByUserId(userId);
+    public String getNameByUserId(String userId) {
+        return userMapper.getNameByUserId(userId);
     }
 
+    /**
+     * 通过jwt令牌获取用户信息
+     */
+    @Override
+    public User getUserByJwt(String JwtToken) {
+        String id = jwtUtils.getIDFromToken(JwtToken.split(" ")[1]);
+        return baseMapper.selectOne(Wrappers.<User>lambdaQuery()
+                .select(User::getUsername, User::getName, User::getBirthday, User::getSex, User::getPhone,
+                        User::getEmail, User::getLockFlag, User::getEnabledFlag, User::getLastLoginTime,
+                        User::getDelFlag, User::getHeadPortraitUrl)
+                .eq(User::getUserId, id));
+    }
 }

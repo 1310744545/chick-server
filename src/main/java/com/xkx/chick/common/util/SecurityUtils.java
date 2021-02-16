@@ -43,7 +43,7 @@ public class SecurityUtils {
      *
      * @return
      */
-    public static Integer getUserId() {
+    public static String getUserId() {
         try {
             return getUserInfo().getUserId();
         } catch (Exception e) {

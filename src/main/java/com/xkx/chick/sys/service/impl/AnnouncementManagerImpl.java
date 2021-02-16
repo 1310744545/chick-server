@@ -47,7 +47,7 @@ public class AnnouncementManagerImpl extends ServiceImpl<AnnouncementManager, An
         List<Announcement> list = announcementPage.getRecords();
         ArrayList<Announcement> newList = new ArrayList<>();
         for (Announcement announcement : list){
-            announcement.setCreateBy(userService.getUserNameByUserId(announcement.getCreateBy()));
+            announcement.setCreateBy(userService.getNameByUserId(announcement.getCreateBy()));
             newList.add(announcement);
         }
         return announcementPage.setRecords(newList);

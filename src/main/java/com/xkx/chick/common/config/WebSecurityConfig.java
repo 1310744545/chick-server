@@ -96,7 +96,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/**/**"
                 ).permitAll().and().authorizeRequests()
 //                .antMatchers(HttpMethod.GET,"/**").permitAll()
-                .antMatchers("/user/login").anonymous()
+//                .antMatchers("/user/login","/user/register").anonymous()
+                .antMatchers("/user/login","/user/register").permitAll()
                 .and()
                 //解决匿名用户访问无权限资源时的异常
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

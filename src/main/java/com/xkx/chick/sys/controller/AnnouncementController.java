@@ -42,8 +42,7 @@ public class AnnouncementController extends BaseController {
             @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
             @ApiImplicitParam(name = "delFlag", value = "是否删除", paramType = "query"),
     })
-    @PostMapping("/list")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/list")
     public R<Page<Announcement>> list(Integer current, Integer size, String keyword, String delFlag) {
         if (StringUtils.isNotBlank(keyword) && keyword.length() > CommonConstants.MAX_NAME_LENGTH) {
             return R.failed("关键字过长");

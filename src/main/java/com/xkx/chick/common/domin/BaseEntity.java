@@ -2,11 +2,13 @@ package com.xkx.chick.common.domin;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @ClassName BaseEntity
@@ -30,8 +32,8 @@ public class BaseEntity {
      * '创建时间'
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @TableField(value = "create_Date", fill = FieldFill.INSERT)
-    private LocalDateTime createDate;
+    @TableField(value = "create_date", fill = FieldFill.INSERT)
+    private Date createDate;
 
     /**
      * '更新者'
@@ -43,11 +45,12 @@ public class BaseEntity {
      * '更新时间'
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @TableField(value = "update_Date", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateDate;
+    @TableField(value = "update_date", fill = FieldFill.INSERT_UPDATE)
+    private Date updateDate;
 
     /**
      * 是否逻辑删除 1是0否
      */
+    @TableField(fill = FieldFill.INSERT)
     private String delFlag;
 }

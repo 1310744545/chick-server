@@ -26,7 +26,7 @@ public class UserManagerServiceImpl extends ServiceImpl<UserManagerMapper, User>
     public Page<User> list(Page<User> validPage, String keyword, String delFlag) {
         System.out.println(SecurityUtils.getAuthentication());
         //1.获取当前用户登录ID
-        Integer userId = SecurityUtils.getUserId();
+        String userId = SecurityUtils.getUserId();
         //2.获取分页任务信息
         LambdaQueryWrapper<User> wrapper = Wrappers.<User>lambdaQuery()
                 .select(User::getUserId, User::getUsername, User::getName, User::getBirthday, User::getSex,

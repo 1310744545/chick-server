@@ -28,8 +28,8 @@ public class User extends BaseEntity implements Serializable{
     /**
      * 用户ID
      */
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private Integer userId;
+    @TableId(value = "user_id", type = IdType.UUID)
+    private String userId;
 
     /**
      * 账号

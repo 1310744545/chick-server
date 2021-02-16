@@ -52,6 +52,15 @@ public interface IUserService extends IService<User> {
     R login(String username, String password, String code, HttpServletRequest request);
 
     /**
+     * 用户注册
+     *
+     * @param username 账号
+     * @param password 密码
+     * @return
+     */
+    R register(String username, String password);
+
+    /**
      * 退出登录
      *
      * @return
@@ -63,6 +72,12 @@ public interface IUserService extends IService<User> {
      * @param userId
      * @return
      */
-    String getUserNameByUserId(String userId);
+    String getNameByUserId(String userId);
 
+    /**
+     * 根据Jwt获取用户信息
+     * @param JwtToken
+     * @return
+     */
+    User getUserByJwt(String JwtToken);
 }

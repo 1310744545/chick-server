@@ -68,11 +68,11 @@ public class JwtUtils {
      * @param token 令牌
      * @return 用户名
      */
-    public Integer getIDFromToken(String token) {
-        Integer id;
+    public String getIDFromToken(String token) {
+        String id;
         try {
             Claims claims = getClaimsFromToken(token);
-            id = (Integer)claims.get(ID);
+            id = claims.get(ID).toString();
         } catch (Exception e) {
             id = null;
         }

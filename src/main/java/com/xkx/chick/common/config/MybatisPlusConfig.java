@@ -35,10 +35,10 @@ public class MybatisPlusConfig {
      * 自动填充功能
      * @return
      */
-    @Bean
-    public GlobalConfig globalConfig() {
-        GlobalConfig globalConfig = new GlobalConfig();
-        globalConfig.setMetaObjectHandler(new MetaHandler());
-        return globalConfig;
-    }
+//    @Bean
+//    public GlobalConfig globalConfig() {
+//        GlobalConfig globalConfig = new GlobalConfig();
+//        globalConfig.setMetaObjectHandler(new MetaHandler());
+//        return globalConfig;
+//    }
 }

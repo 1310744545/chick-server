@@ -7,8 +7,10 @@ import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Date;
+
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+
 
 @Component
 public class MetaHandler implements MetaObjectHandler {
@@ -21,11 +23,17 @@ public class MetaHandler implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        Integer userId = SecurityUtils.getUserId();
-        this.setFieldValByName("createDate", new Date(), metaObject);
+        String userId = new String();
+        try{
+            userId = SecurityUtils.getUserId();
+        }catch (Exception e){
+            System.out.println("用户注册");
+        }
+        this.setFieldValByName("createDate",new Date(), metaObject);
         this.setFieldValByName("createBy", userId, metaObject);
         this.setFieldValByName("updateDate", new Date(), metaObject);
         this.setFieldValByName("updateBy", userId, metaObject);
+        this.setFieldValByName("delFlag", "0", metaObject);
     }
 
     /**
@@ -34,7 +42,7 @@ public class MetaHandler implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        Integer userId = SecurityUtils.getUserId();
+        String userId = SecurityUtils.getUserId();
         this.setFieldValByName("updateDate", new Date(), metaObject);
         this.setFieldValByName("updateBy", userId, metaObject);
     }
