@@ -2,24 +2,15 @@ package com.xkx.chick.sys.controller;
 
 
 import com.aliyun.oss.OSSClient;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.code.kaptcha.Constants;
-
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.xkx.chick.common.base.R;
-import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.controller.BaseController;
 import com.xkx.chick.common.util.JwtUtils;
-import com.xkx.chick.common.util.PageUtils;
-import com.xkx.chick.sys.pojo.dto.LoginUserDTO;
-import com.xkx.chick.sys.pojo.entity.User;
 import com.xkx.chick.sys.service.IUserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,11 +19,9 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
