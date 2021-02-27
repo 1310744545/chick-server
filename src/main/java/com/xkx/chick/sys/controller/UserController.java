@@ -89,7 +89,7 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 退出登录,暂时没用,后期将token存到redis中时需要用
+     * 退出登录,暂时没用,后期将token存到redis中时需要用这里先不用
      * @return
      */
     @ApiOperation(value = "退出登录", httpMethod = "GET")
