@@ -46,7 +46,5 @@ logging:
 
 alioss:
   endpoint: oss-cn-beijing.aliyuncs.com
-  accessKeyId: LTAI4GASAoWcBMCDJgYuhcva
-  accessKeySecret: 0MWmVQ0ek1JEbALQKarDxucYqrvp7J
   bucketName: chickweb
   headPortrait: headPortrait/
