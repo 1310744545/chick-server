@@ -4,13 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.util.StringUtils;
 import com.xkx.chick.web.constant.ChickConstant;
 import com.xkx.chick.web.mapper.ToolsMapper;
 import com.xkx.chick.web.pojo.entity.Tools;
 import com.xkx.chick.web.service.IToolsService;
 import org.springframework.stereotype.Service;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -112,5 +117,23 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
             resultList.add(resultString.toString());
         }
         return resultList;
+    }
+
+    @Override
+    public R base64EncodeOrDecode(String code, String flag) {
+        if ("0".equals(flag)){
+            BASE64Encoder encoder = new BASE64Encoder();
+            return R.ok(encoder.encode(code.getBytes(StandardCharsets.UTF_8)), "编码成功");
+        }
+        if ("1".equals(flag)){
+            BASE64Decoder decoder = new BASE64Decoder();
+            try {
+                return R.ok(new String(decoder.decodeBuffer(code), StandardCharsets.UTF_8), "解码成功");
+            } catch (IOException e) {
+                e.printStackTrace();
+                R.failed("请输入正确的编码过的base64字符");
+            }
+        }
+        return R.failed("系统错误");
     }
 }

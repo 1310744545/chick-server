@@ -2,6 +2,7 @@ package com.xkx.chick.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xkx.chick.common.base.R;
 import com.xkx.chick.web.pojo.entity.Tools;
 
 import java.util.List;
@@ -45,4 +46,13 @@ public interface IToolsService extends IService<Tools> {
      * @return 随机密码
      */
     List<String> generateRandomCipher(Integer count, Integer numberCount, Boolean smallLetter, Boolean bigLetter, Boolean number, Boolean specialCharacter, Boolean rubbishCharacter);
+
+    /**
+     * base64编码/解码
+     *
+     * @param code base64编码/解码的字符
+     * @param flag 0编码 1解码
+     * @return 编码/解码后的字符
+     */
+    R base64EncodeOrDecode(String code, String flag);
 }

@@ -98,4 +98,21 @@ public class ToolsController extends BaseController{
         }
         return R.ok(iToolsService.generateRandomCipher(count, numberCount, smallLetter, bigLetter, number, specialCharacter, rubbishCharacter), "生成成功");
     }
+
+    @ApiOperation(value = "base64编码/解码", position = 1, httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "code", value = "编码或解码的字符", required = true),
+            @ApiImplicitParam(paramType = "query", name = "flag", value = "0编码 1解码", required = true),
+    })
+    @GetMapping("/base64EncodeOrDecode")
+    public R base64EncodeOrDecode(String code, String flag) {
+        if (StringUtils.isEmpty(code)){
+            return R.failed("请填写编码或解码的字符");
+        }
+        if (StringUtils.isEmpty(flag)){
+            return R.failed("服务器错误");
+        }
+        return iToolsService.base64EncodeOrDecode(code, flag);
+    }
+
 }
