@@ -47,4 +47,10 @@ public interface CommonConstants {
      */
     String DELETE_FLAG = "0";
     String UN_DELETE_FLAG = "1";
+
+    /**
+     * 阿里云key与secret的名字
+     */
+    String aliKey = "accessKeyId";
+    String aliSecret = "accessKeySecret";
 }

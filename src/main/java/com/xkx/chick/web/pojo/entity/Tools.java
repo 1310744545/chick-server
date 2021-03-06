@@ -1,10 +1,11 @@
 package com.xkx.chick.web.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -20,6 +21,10 @@ import lombok.EqualsAndHashCode;
 public class Tools implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * id
+     */
+    private String id;
 
     /**
      * 名字

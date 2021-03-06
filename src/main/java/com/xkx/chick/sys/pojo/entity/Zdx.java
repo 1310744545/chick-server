@@ -1,11 +1,12 @@
 package com.xkx.chick.sys.pojo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.xkx.chick.common.domin.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -17,9 +18,15 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Zdx implements Serializable {
+@TableName("sys_zdx")
+public class Zdx extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * id
+     */
+    private String id;
 
     /**
      * 字典
@@ -60,31 +67,5 @@ public class Zdx implements Serializable {
      * 备注信息
      */
     private String remarks;
-
-    /**
-     * 删除标记
-     */
-    private String delFlag;
-
-    /**
-     * 创建者
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createDate;
-
-    /**
-     * 更新者
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateDate;
-
 
 }
