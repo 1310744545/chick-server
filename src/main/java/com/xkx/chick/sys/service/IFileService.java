@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.sys.pojo.entity.SysFile;
+import com.xkx.chick.sys.pojo.vo.FileVO;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -21,7 +22,7 @@ public interface IFileService extends IService<SysFile> {
      * @param file 文件
      * @return R
      */
-    R uploadFile(MultipartFile file);
+    R managerUploadFile(MultipartFile file, String type, String remarks);
 
     /**
      * 获取文件列表
@@ -31,6 +32,23 @@ public interface IFileService extends IService<SysFile> {
      * @param delFlag   删除标记
      * @return 分页列表
      */
-    Page<SysFile> list(Page<SysFile> validPage, String keyword, String type, String delFlag);
+    Page<FileVO> list(Page<SysFile> validPage, String keyword, String type, String delFlag);
+
+    /**
+     * 删除或恢复文件
+     *
+     * @param fileId 文件id
+     * @return R
+     */
+    R deleteOrRenew(String fileId, String delFlag);
+
+    /**
+     * 批量删除
+     *
+     * @param fileIds 文件id
+     * @return R
+     */
+    R batchRemove(String fileIds);
+
 
 }

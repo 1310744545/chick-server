@@ -1,21 +1,26 @@
 package com.xkx.chick.sys.service.impl;
 
 import com.aliyun.oss.OSSClient;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xkx.chick.common.base.R;
+import com.xkx.chick.common.constant.CommonConstants;
+import com.xkx.chick.common.constant.OSSClientConstants;
 import com.xkx.chick.common.util.AliyunOSSClientUtil;
 import com.xkx.chick.common.util.StringUtils;
 import com.xkx.chick.sys.mapper.FileMapper;
+import com.xkx.chick.sys.mapper.ZdxMapper;
 import com.xkx.chick.sys.pojo.entity.SysFile;
+import com.xkx.chick.sys.pojo.entity.Zdx;
+import com.xkx.chick.sys.pojo.vo.FileVO;
 import com.xkx.chick.sys.service.IFileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import javax.annotation.Resource;
+import java.util.UUID;
 
 import static com.xkx.chick.common.constant.OSSClientConstants.BACKET_NAME;
 
@@ -30,8 +35,10 @@ import static com.xkx.chick.common.constant.OSSClientConstants.BACKET_NAME;
 @Service
 public class FileServiceImpl extends ServiceImpl<FileMapper, SysFile> implements IFileService {
 
-    @Autowired
+    @Resource
     private AliyunOSSClientUtil aliyunOSSClientUtil;
+    @Resource
+    private ZdxMapper zdxMapper;
 
     /**
      * 上传文件
@@ -40,18 +47,32 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, SysFile> implements
      * @return R
      */
     @Override
-    public R uploadFile(MultipartFile file) {
+    public R managerUploadFile(MultipartFile file, String type, String remarks) {
+        //获取对应类型的存储路径
+        Zdx zdx = zdxMapper.selectById(type);
         //初始化OSSClient
         OSSClient ossClient = aliyunOSSClientUtil.getOSSClient();
+        //上传文件,返回唯一key
+        String md5key = AliyunOSSClientUtil.uploadObject2OSS(ossClient, file, BACKET_NAME, zdx.getValue()+"manager/");
+        //关闭OSSClient
+        ossClient.shutdown();
+        //获取地址
+        String url  = OSSClientConstants.URL_Head + zdx.getValue()+"manager/" + file.getOriginalFilename();
 
-        String md5key = AliyunOSSClientUtil.uploadObject2OSS(ossClient, file, BACKET_NAME, "files/");
-        Date expiration = new Date(new Date().getTime() + 3600l * 1000 * 24 * 365 * 10);
-        String url = ossClient.generatePresignedUrl(BACKET_NAME, "files/" + file.getName(), expiration).toString();
-        System.out.println(md5key);
-        System.out.println(url);
-        SysFile sysfile = new SysFile();
-        int insert = baseMapper.insert(sysfile);
-        if (insert > 0) {
+        //先通过md5ket去数据库中检查是否已经上传,如果是则不在向数据库中插入
+        SysFile sysFile = baseMapper.selectOne(Wrappers.<SysFile>lambdaQuery()
+                .eq(SysFile::getMd5key, md5key)
+                .eq(SysFile::getDelFlag, CommonConstants.DELETE_FLAG));
+        if (ObjectUtils.isEmpty(sysFile)){
+            String uuid= UUID.randomUUID().toString();
+            SysFile sysfile = new SysFile(uuid, md5key, file.getOriginalFilename(), type, url, file.getOriginalFilename(), file.getSize());
+            if (StringUtils.isNotEmpty(remarks)){
+                sysfile.setRemarks(remarks);
+            }
+            if (baseMapper.insert(sysfile) > 0) {
+                return R.ok("上传成功");
+            }
+        } else {
             return R.ok("上传成功");
         }
         return R.failed();
@@ -66,21 +87,45 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, SysFile> implements
      * @return 分页列表
      */
     @Override
-    public Page<SysFile> list(Page<SysFile> validPage, String keyword, String type, String delFlag) {
-        //获取分页任务信息
-        LambdaQueryWrapper<SysFile> wrapper = Wrappers.<SysFile>lambdaQuery()
-                .eq(SysFile::getDelFlag, delFlag)
-                .orderByDesc(SysFile::getCreateDate);
-        //添加关键字
-        if (StringUtils.isNotBlank(keyword)) {
-            wrapper.and(wr -> wr.like(SysFile::getName, keyword)
-                    .or().like(SysFile::getOriginalFilename, keyword));
+    public Page<FileVO> list(Page<SysFile> validPage, String keyword, String type, String delFlag) {
+        return baseMapper.getList(validPage, keyword, type, delFlag);
+    }
 
+    /**
+     * 删除或恢复文件
+     *
+     * @param fileId 文件id
+     * @return R
+     */
+    @Override
+    public R deleteOrRenew(String fileId, String delFlag) {
+        int update = baseMapper.update(null, Wrappers.<SysFile>lambdaUpdate()
+                .eq(SysFile::getId, fileId)
+                .set(SysFile::getDelFlag, CommonConstants.DELETE_FLAG.equals(delFlag) ? CommonConstants.UN_DELETE_FLAG:CommonConstants.DELETE_FLAG));
+
+        if (update > 0 && CommonConstants.DELETE_FLAG.equals(delFlag)){
+            return R.ok("删除成功");
+        }else if (update > 0 && CommonConstants.UN_DELETE_FLAG.equals(delFlag)){
+            return R.ok("恢复成功");
+        }else {
+            return R.failed("系统错误,请联系站长");
         }
-        //添加文件类型那个
-        if (StringUtils.isNotEmpty(type)){
-            wrapper.and(wr -> wr.eq(SysFile::getType, type));
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param fileIds 文件id
+     * @return R
+     */
+    @Override
+    public R batchRemove(String fileIds) {
+        int update = baseMapper.update(null, Wrappers.<SysFile>lambdaUpdate()
+                .set(SysFile::getDelFlag, CommonConstants.UN_DELETE_FLAG)
+                .in(SysFile::getId, fileIds.split(",")));
+        if (update > 0){
+            return R.ok("删除成功");
         }
-        return baseMapper.selectPage(validPage, wrapper);
+        return R.failed("删除失败或已删除");
     }
 }

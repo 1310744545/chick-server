@@ -9,6 +9,7 @@ import com.xkx.chick.common.util.StringUtils;
 import com.xkx.chick.web.constant.ChickConstant;
 import com.xkx.chick.web.mapper.ToolsMapper;
 import com.xkx.chick.web.pojo.entity.Tools;
+import com.xkx.chick.web.pojo.vo.ToolsVO;
 import com.xkx.chick.web.service.IToolsService;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
@@ -42,15 +43,16 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
      * @return 分页列表
      */
     @Override
-    public Page<Tools> list(Page<Tools> validPage, String keyword, String delFlag) {
-        LambdaQueryWrapper<Tools> wrapper = Wrappers.<Tools>lambdaQuery()
-                .eq(Tools::getDelFlag, delFlag)
-                .orderByAsc(Tools::getCreateDate);
-        //3.添加关键字
-        if (StringUtils.isNotBlank(keyword)) {
-            wrapper.and(wr -> wr.like(Tools::getName, keyword));
-        }
-        return baseMapper.selectPage(validPage, wrapper);
+    public Page<ToolsVO> list(Page<ToolsVO> validPage, String keyword, String delFlag) {
+        return baseMapper.getList(validPage, keyword, delFlag);
+//        LambdaQueryWrapper<Tools> wrapper = Wrappers.<Tools>lambdaQuery()
+//                .eq(Tools::getDelFlag, delFlag)
+//                .orderByAsc(Tools::getCreateDate);
+//        //3.添加关键字
+//        if (StringUtils.isNotBlank(keyword)) {
+//            wrapper.and(wr -> wr.like(Tools::getName, keyword));
+//        }
+//        return baseMapper.selectPage(validPage, wrapper);
     }
 
     /**

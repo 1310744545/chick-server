@@ -1,4 +1,4 @@
-package com.xkx.chick.sys.pojo.entity;
+package com.xkx.chick.sys.pojo.vo;
 
 import com.xkx.chick.common.domin.BaseEntity;
 import lombok.Data;
@@ -7,18 +7,15 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author 肖可欣
- * @since 2021-03-06
+ * @ClassName FileVO
+ * @Author xiaokexin
+ * @Date 2021/3/7 18:34
+ * @Description FileVO
+ * @Version 1.0
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SysFile extends BaseEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class FileVO extends BaseEntity implements Serializable {
 
     /**
      * id
@@ -60,16 +57,14 @@ public class SysFile extends BaseEntity implements Serializable {
      */
     private String remarks;
 
-    public SysFile() {
-    }
+    /**
+     * 文件类型名称
+     */
+    private String typeName;
 
-    public SysFile(String id, String md5key, String name, String type, String url, String originalFilename, Long size) {
-        this.id = id;
-        this.md5key = md5key;
-        this.name = name;
-        this.type = type;
-        this.url = url;
-        this.originalFilename = originalFilename;
-        this.size = size;
-    }
+    /**
+     * 上传人名字
+     */
+    private String createName;
+
 }

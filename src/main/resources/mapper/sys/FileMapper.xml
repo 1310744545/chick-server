@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkx.chick.sys.mapper.FileMapper">
+
+    <select id="getList" resultType="com.xkx.chick.sys.pojo.vo.FileVO">
+        SELECT
+        a.id,
+        a.md5key,
+        a.`name`,
+        a.`type`,
+        a.url,
+        a.original_filename,
+        a.`size`,
+        a.remarks,
+        a.create_date,
+        a.del_flag,
+        b.name as typeName,
+        c.name as createName
+        FROM
+        sys_file a
+        LEFT JOIN sys_zdx b ON a.type = b.id
+        LEFT JOIN sys_user c ON a.create_by = c.user_id
+        WHERE
+        a.del_flag = #{delFlag}
+        <if test="type != null and type != ''">
+            AND b.id = #{type}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (
+            a.`name` like concat('%',#{keyword},'%')
+            or a.originalFilename like concat('%',#{keyword},'%')
+            )
+        </if>
+        ORDER BY a.create_date desc
+    </select>
+</mapper>

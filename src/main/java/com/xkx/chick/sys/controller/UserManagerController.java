@@ -10,7 +10,6 @@ import com.xkx.chick.sys.service.IUserManagerService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +40,7 @@ public class UserManagerController {
             @ApiImplicitParam(name = "delFlag", value = "是否删除", paramType = "query"),
     })
     @GetMapping("/list")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R<Page<User>> list(Integer current, Integer size, String keyword, String delFlag) {
         if (StringUtils.isNotBlank(keyword) && keyword.length() > CommonConstants.MAX_NAME_LENGTH) {
             return R.failed("关键字过长");
@@ -58,7 +57,7 @@ public class UserManagerController {
             @ApiImplicitParam(paramType = "query", name = "lockFlag", value = "当前锁定状态", required = true),
     })
     @PostMapping("/luckOrUnlock")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R luckOrUnlock(String userId, String lockFlag) {
         if (StringUtils.isEmpty(lockFlag) || userId == null){
             return R.failed("锁定标记或用户id为空");
@@ -73,7 +72,7 @@ public class UserManagerController {
             @ApiImplicitParam(paramType = "query", name = "enabledFlag", value = "当前禁用状态", required = true),
     })
     @PostMapping("/enabledOrUnEnabled")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R enabledOrUnEnabled(String userId, String enabledFlag) {
         if (StringUtils.isEmpty(enabledFlag) || userId == null){
             return R.failed("禁用标记或用户id为空");
@@ -87,10 +86,10 @@ public class UserManagerController {
             @ApiImplicitParam(paramType = "query", name = "delFlag", value = "当前删除状态", required = true),
     })
     @PostMapping("/deleteOrRenew")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R deleteOrRenew(String userId, String delFlag) {
         if (userId == null){
-            return R.failed("禁用标记或用户id为空");
+            return R.failed("删除标记或用户id为空");
         }
         return userManagerService.deleteOrRenew(userId, delFlag);
     }

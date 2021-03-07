@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.web.pojo.entity.Tools;
+import com.xkx.chick.web.pojo.vo.ToolsVO;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface IToolsService extends IService<Tools> {
      * @param delFlag   删除标记
      * @return 分页列表
      */
-    Page<Tools> list(Page<Tools> validPage, String keyword, String delFlag);
+    Page<ToolsVO> list(Page<ToolsVO> validPage, String keyword, String delFlag);
 
     /**
      * 生成UUID

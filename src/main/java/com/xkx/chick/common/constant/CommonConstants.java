@@ -53,4 +53,11 @@ public interface CommonConstants {
      */
     String aliKey = "accessKeyId";
     String aliSecret = "accessKeySecret";
+
+    /* 角色相关 */
+    /**
+     * 运营管理
+     */
+    String ROLE_ADMIN = "ROLE_ADMIN";
+    String HAS_ROLE_ADMIN = "hasRole('ROLE_ADMIN')";
 }

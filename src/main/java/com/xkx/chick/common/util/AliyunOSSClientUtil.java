@@ -169,7 +169,7 @@ public class AliyunOSSClientUtil {
             //以输入流的形式上传文件
             InputStream is = file.getInputStream();
             //文件名
-            String fileName = file.getName();
+            String fileName = file.getOriginalFilename();
             //文件大小
             Long fileSize = file.getSize();
             //创建上传Object的Metadata  

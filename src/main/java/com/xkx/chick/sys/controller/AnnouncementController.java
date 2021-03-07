@@ -58,7 +58,7 @@ public class AnnouncementController extends BaseController {
             @ApiImplicitParam(paramType = "query", name = "delFlag", value = "当前删除状态", required = true),
     })
     @PostMapping("/deleteOrRenew")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R deleteOrRenew(String id, String delFlag) {
         if (id == null){
             return R.failed("禁用标记或用户id为空");
@@ -75,7 +75,7 @@ public class AnnouncementController extends BaseController {
             @ApiImplicitParam(paramType = "query", name = "type", value = "公告类型", required = true),
     })
     @PostMapping("/edit")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R edit(String id, String title, String content, String type) {
         if (StringUtils.isAllEmpty(title, content, type)){
             return R.failed("有必填项为空");
