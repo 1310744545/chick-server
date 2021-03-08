@@ -1,11 +1,9 @@
 package com.xkx.chick.web.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xkx.chick.common.base.R;
-import com.xkx.chick.common.util.StringUtils;
+import com.xkx.chick.common.util.QRCodeUtil;
 import com.xkx.chick.web.constant.ChickConstant;
 import com.xkx.chick.web.mapper.ToolsMapper;
 import com.xkx.chick.web.pojo.entity.Tools;
@@ -15,6 +13,12 @@ import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -121,6 +125,13 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
         return resultList;
     }
 
+    /**
+     * base64编码/解码
+     *
+     * @param code base64编码/解码的字符
+     * @param flag 0编码 1解码
+     * @return 编码/解码后的字符
+     */
     @Override
     public R base64EncodeOrDecode(String code, String flag) {
         if ("0".equals(flag)){
@@ -137,5 +148,36 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
             }
         }
         return R.failed("系统错误");
+    }
+
+    /**
+     * 生成二维码
+     *
+     * @param textarea 内容
+     */
+    @Override
+    public void createQRCode(String textarea, HttpServletRequest request, HttpServletResponse response) {
+        byte[] captcha;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            response.setHeader("Cache-Control", "no-store");
+            response.setHeader("Pragma", "no-cache");
+            response.setDateHeader("Expires", 0);
+            response.setContentType("image/jpeg");
+            BufferedImage bi = QRCodeUtil.encode(textarea);
+            ImageIO.write(bi, "jpg", out);
+
+            captcha = out.toByteArray();
+            response.setHeader("Cache-Control", "no-store");
+            response.setHeader("Pragma", "no-cache");
+            response.setDateHeader("Expires", 0);
+            response.setContentType("image/jpeg");
+            ServletOutputStream sout = response.getOutputStream();
+            sout.write(captcha);
+            sout.flush();
+            sout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

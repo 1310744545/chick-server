@@ -14,10 +14,13 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -115,4 +118,27 @@ public class ToolsController extends BaseController{
         return iToolsService.base64EncodeOrDecode(code, flag);
     }
 
+    @ApiOperation(value = "生成二维码", position = 1, httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "textarea", value = "内容", paramType = "query"),
+    })
+    @GetMapping("/createQRCode")
+    public void createQRCode(String textarea, HttpServletRequest request, HttpServletResponse response){
+        if (StringUtils.isEmpty(textarea)){
+            return;
+        }
+        iToolsService.createQRCode(textarea, request, response);
+    }
+
+    @ApiOperation(value = "下载二维码", position = 1, httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "textarea", value = "内容", paramType = "query"),
+    })
+    @PostMapping("/downloadQRCode")
+    public void downloadQRCode(String textarea, HttpServletRequest request, HttpServletResponse response){
+        if (StringUtils.isEmpty(textarea)){
+            return;
+        }
+        iToolsService.createQRCode(textarea, request, response);
+    }
 }

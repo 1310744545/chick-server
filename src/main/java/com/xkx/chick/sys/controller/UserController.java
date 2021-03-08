@@ -107,7 +107,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "验证码", httpMethod = "GET")
     @GetMapping("/captcha")
     public void captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        byte[] captcha = null;
+        byte[] captcha;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         try {

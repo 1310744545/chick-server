@@ -6,6 +6,8 @@ import com.xkx.chick.common.base.R;
 import com.xkx.chick.web.pojo.entity.Tools;
 import com.xkx.chick.web.pojo.vo.ToolsVO;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -56,4 +58,11 @@ public interface IToolsService extends IService<Tools> {
      * @return 编码/解码后的字符
      */
     R base64EncodeOrDecode(String code, String flag);
+
+    /**
+     * 生成二维码
+     *
+     * @param textarea 内容
+     */
+    void createQRCode(String textarea, HttpServletRequest request, HttpServletResponse response);
 }

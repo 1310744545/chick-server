@@ -60,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * 配置密码加密编码
      */
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //设置权限
         List<Menu> menuList = menuService.list();
-        for (Menu menu : menuList){
+        for (Menu menu : menuList) {
             httpSecurity.authorizeRequests().antMatchers(menu.getPath()).hasAnyAuthority(menu.getPermission());
         }
 
@@ -94,10 +94,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**",
                         "/**/**",
                         "/**/**/**"
-                ).permitAll().and().authorizeRequests()
+                ).permitAll()
+                .antMatchers(
+                        HttpMethod.POST,
+                        "/chick/tools/createQRCode"
+                ).permitAll()
+                .and().authorizeRequests()
 //                .antMatchers(HttpMethod.GET,"/**").permitAll()
 //                .antMatchers("/user/login","/user/register").anonymous()
-                .antMatchers("/user/login","/user/register").permitAll()
+                .antMatchers("/user/login", "/user/register").permitAll()
                 .and()
                 //解决匿名用户访问无权限资源时的异常
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
