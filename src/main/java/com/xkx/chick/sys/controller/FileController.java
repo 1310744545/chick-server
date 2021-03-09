@@ -41,7 +41,6 @@ public class FileController extends BaseController {
     @PostMapping("/managerUploadFile")
     @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R managerUploadFile(@RequestParam(name = "file") MultipartFile file, String type, String remarks){
-        System.out.println(type);
         if (ObjectUtils.isEmpty(file)){
             return R.failed("请上传文件");
         }

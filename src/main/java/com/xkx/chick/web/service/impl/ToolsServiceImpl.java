@@ -10,6 +10,7 @@ import com.xkx.chick.web.pojo.entity.Tools;
 import com.xkx.chick.web.pojo.vo.ToolsVO;
 import com.xkx.chick.web.service.IToolsService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -18,8 +19,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +68,7 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
     @Override
     public List<String> generateUUID(Integer count) {
         ArrayList<String> UUIDList = new ArrayList<>();
-        for (int i = 1; i <= count; i++){
+        for (int i = 1; i <= count; i++) {
             UUIDList.add(UUID.randomUUID().toString());
         }
         return UUIDList;
@@ -77,11 +77,11 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
     /**
      * 生成随机密码
      *
-     * @param count 生成个数
-     * @param numberCount 密码位数
-     * @param smallLetter 小写字母
-     * @param bigLetter 大写字母
-     * @param number 数字
+     * @param count            生成个数
+     * @param numberCount      密码位数
+     * @param smallLetter      小写字母
+     * @param bigLetter        大写字母
+     * @param number           数字
      * @param specialCharacter 特殊字符
      * @param rubbishCharacter 去除不易识别字符
      * @return 随机密码
@@ -89,23 +89,23 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
     @Override
     public List<String> generateRandomCipher(Integer count, Integer numberCount, Boolean smallLetter, Boolean bigLetter, Boolean number, Boolean specialCharacter, Boolean rubbishCharacter) {
         //存储用户选择的字符
-        List<String> characterList =new ArrayList<>();
-        if (smallLetter){
+        List<String> characterList = new ArrayList<>();
+        if (smallLetter) {
             characterList.addAll(ChickConstant.LOWERCASE);
         }
-        if (bigLetter){
+        if (bigLetter) {
             characterList.addAll(ChickConstant.UPPERCASE);
         }
-        if (number){
+        if (number) {
             characterList.addAll(ChickConstant.NUMBER);
         }
-        if (specialCharacter){
+        if (specialCharacter) {
             characterList.addAll(ChickConstant.SPECIAL_CHARACTER);
         }
         //是否去除不易识别字符
-        if (rubbishCharacter){
-            for (String c : ChickConstant.RUBBISH_CHARACTER){
-                if (characterList.contains(c)){
+        if (rubbishCharacter) {
+            for (String c : ChickConstant.RUBBISH_CHARACTER) {
+                if (characterList.contains(c)) {
                     characterList.remove(c);
                 }
             }
@@ -114,9 +114,9 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
         List<String> resultList = new ArrayList<>();
         Random random = new Random();
 
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             StringBuffer resultString = new StringBuffer();
-            for (int j = 0; j < numberCount; j++){
+            for (int j = 0; j < numberCount; j++) {
                 int n = random.nextInt(characterList.size());
                 resultString.append(characterList.get(n));
             }
@@ -134,11 +134,11 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
      */
     @Override
     public R base64EncodeOrDecode(String code, String flag) {
-        if ("0".equals(flag)){
+        if ("0".equals(flag)) {
             BASE64Encoder encoder = new BASE64Encoder();
             return R.ok(encoder.encode(code.getBytes(StandardCharsets.UTF_8)), "编码成功");
         }
-        if ("1".equals(flag)){
+        if ("1".equals(flag)) {
             BASE64Decoder decoder = new BASE64Decoder();
             try {
                 return R.ok(new String(decoder.decodeBuffer(code), StandardCharsets.UTF_8), "解码成功");
@@ -176,6 +176,46 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
             sout.write(captcha);
             sout.flush();
             sout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 识别二维码
+     *
+     * @param file 二维码
+     */
+    @Override
+    public R distinguishQRCode(MultipartFile file) {
+        File toFile = null;
+        String content ;
+        try {
+            InputStream ins = null;
+            ins = file.getInputStream();
+            toFile = new File(file.getOriginalFilename());
+            inputStreamToFile(ins, toFile);
+            ins.close();
+            content = QRCodeUtil.decode(toFile);
+        } catch (Exception e) {
+            return R.failed("系统错误");
+        }
+        ArrayList<String> list = new ArrayList<>();
+        list.add(content);
+        return R.ok(list);
+    }
+
+
+    private static void inputStreamToFile(InputStream ins, File file) {
+        try {
+            OutputStream os = new FileOutputStream(file);
+            int bytesRead = 0;
+            byte[] buffer = new byte[8192];
+            while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            os.close();
+            ins.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

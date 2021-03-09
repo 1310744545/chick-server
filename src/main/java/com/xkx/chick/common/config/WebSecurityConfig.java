@@ -97,7 +97,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 ).permitAll()
                 .antMatchers(
                         HttpMethod.POST,
-                        "/chick/tools/createQRCode"
+                        "/chick/tools/**"
                 ).permitAll()
                 .and().authorizeRequests()
 //                .antMatchers(HttpMethod.GET,"/**").permitAll()

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.web.pojo.entity.Tools;
 import com.xkx.chick.web.pojo.vo.ToolsVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,10 +41,10 @@ public interface IToolsService extends IService<Tools> {
     /**
      * 生成随机密码
      *
-     * @param count 生成个数
-     * @param smallLetter 生成个数
-     * @param bigLetter 生成个数
-     * @param number 生成个数
+     * @param count            生成个数
+     * @param smallLetter      生成个数
+     * @param bigLetter        生成个数
+     * @param number           生成个数
      * @param specialCharacter 生成个数
      * @param rubbishCharacter 生成个数
      * @return 随机密码
@@ -65,4 +66,11 @@ public interface IToolsService extends IService<Tools> {
      * @param textarea 内容
      */
     void createQRCode(String textarea, HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 识别二维码
+     *
+     * @param file 二维码
+     */
+    R distinguishQRCode(MultipartFile file);
 }

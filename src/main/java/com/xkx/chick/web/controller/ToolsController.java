@@ -13,10 +13,9 @@ import com.xkx.chick.web.service.IToolsService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -141,4 +140,15 @@ public class ToolsController extends BaseController{
         }
         iToolsService.createQRCode(textarea, request, response);
     }
+
+    @ApiOperation(value = "识别二维码", position = 1, httpMethod = "POST")
+    @PostMapping("/distinguishQRCode")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
+    public R distinguishQRCode(@RequestParam(name = "file") MultipartFile file){
+        if (ObjectUtils.isEmpty(file)){
+            return R.failed("请上传二维码");
+        }
+        return iToolsService.distinguishQRCode(file);
+    }
+
 }
