@@ -198,7 +198,7 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
             ins.close();
             content = QRCodeUtil.decode(toFile);
         } catch (Exception e) {
-            return R.failed("系统错误");
+            return R.failed("请上传正确的二维码");
         }
         ArrayList<String> list = new ArrayList<>();
         list.add(content);

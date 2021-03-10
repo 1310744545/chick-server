@@ -1,7 +1,8 @@
 package com.xkx.chick.web.controller;
 
 import com.xkx.chick.common.base.R;
-import com.xkx.chick.common.util.SecurityUtils;
+import com.xkx.chick.common.util.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @ResponseBody
 public class TestController {
+
+    @Autowired
+    RedisUtil redisUtil;
 
     @PostMapping("/add")
     public R add(){
@@ -33,6 +37,8 @@ public class TestController {
     }
     @GetMapping("/get")
     public R get(){
+        redisUtil.set("mykey", "myvalue");
+        System.out.println(redisUtil.get("mykey"));
         return R.ok("这里是get的data","获取信息");
     }
 }

@@ -2,9 +2,6 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.xkx.chick.web.mapper.sys.UserMapper">
-    <select id="getPermissionByUserName" parameterType="string" resultType="string">
-        SELECT
+<mapper namespace="com.xkx.chick.web.mapper.sys.MenuMapper">
 
-    </select>
 </mapper>
