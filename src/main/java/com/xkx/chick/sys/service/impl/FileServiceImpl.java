@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.UUID;
 
 import static com.xkx.chick.common.constant.OSSClientConstants.BACKET_NAME;
@@ -127,5 +128,12 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, SysFile> implements
             return R.ok("删除成功");
         }
         return R.failed("删除失败或已删除");
+    }
+
+    @Override
+    public List<SysFile> listAllByType(String type) {
+        return baseMapper.selectList(Wrappers.<SysFile>lambdaQuery()
+            .eq(SysFile::getType, type)
+            .eq(SysFile::getDelFlag, CommonConstants.DELETE_FLAG));
     }
 }

@@ -28,7 +28,7 @@
         <if test="keyword != null and keyword != ''">
             AND (
             a.`name` like concat('%',#{keyword},'%')
-            or a.originalFilename like concat('%',#{keyword},'%')
+            or a.original_filename like concat('%',#{keyword},'%')
             )
         </if>
         ORDER BY a.create_date desc

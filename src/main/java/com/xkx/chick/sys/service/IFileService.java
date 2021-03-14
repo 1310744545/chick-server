@@ -7,6 +7,8 @@ import com.xkx.chick.sys.pojo.entity.SysFile;
 import com.xkx.chick.sys.pojo.vo.FileVO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -50,5 +52,12 @@ public interface IFileService extends IService<SysFile> {
      */
     R batchRemove(String fileIds);
 
+    /**
+     * 批量删除
+     *
+     * @param type 文件类型
+     * @return R
+     */
+    List<SysFile> listAllByType(String type);
 
 }

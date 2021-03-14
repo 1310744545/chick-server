@@ -9,16 +9,16 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 关注关系
+ * 软件内容
  * </p>
  *
  * @author 肖可欣
- * @since 2021-02-28
+ * @since 2021-03-13
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("chick_follow")
-public class Follow extends BaseEntity implements Serializable {
+@TableName("chick_software_content")
+public class SoftwareContent extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -27,14 +27,19 @@ public class Follow extends BaseEntity implements Serializable {
     private String id;
 
     /**
-     * 用户id
+     * 所属文件id
      */
-    private String userId;
+    private String softwareId;
 
     /**
-     * 关注的人的id
+     * 文件id
      */
-    private String followUserId;
+    private String fileId;
+
+    /**
+     * 版本号
+     */
+    private String versions;
 
 
 

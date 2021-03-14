@@ -9,14 +9,12 @@ import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.util.StringUtils;
 import com.xkx.chick.sys.mapper.AnnouncementManager;
 import com.xkx.chick.sys.pojo.entity.Announcement;
-import com.xkx.chick.sys.pojo.entity.User;
 import com.xkx.chick.sys.service.IAnnouncementManagerService;
 import com.xkx.chick.sys.service.IUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +31,14 @@ public class AnnouncementManagerImpl extends ServiceImpl<AnnouncementManager, An
     @Resource
     IUserService userService;
 
+    /**
+     * 获取公告列表
+     *
+     * @param validPage 分页信息
+     * @param keyword   关键字
+     * @param delFlag   删除标记
+     * @return 分页列表
+     */
     @Override
     public Page<Announcement> list(Page<Announcement> validPage, String keyword, String delFlag) {
         //1.获取分页任务信息
@@ -53,6 +59,12 @@ public class AnnouncementManagerImpl extends ServiceImpl<AnnouncementManager, An
         return announcementPage.setRecords(newList);
     }
 
+    /**
+     * 删除或恢复公告
+     *
+     * @param id 公告
+     * @return R
+     */
     @Override
     public R deleteOrRenew(String id, String delFlag) {
         int update = baseMapper.update(null, Wrappers.<Announcement>lambdaUpdate()
@@ -68,6 +80,12 @@ public class AnnouncementManagerImpl extends ServiceImpl<AnnouncementManager, An
         }
     }
 
+    /**
+     * 更新或添加公告
+     *
+     * @param id 公告
+     * @return R
+     */
     @Override
     public R edit(String id, String title, String content, String type) {
         Announcement announcement = new Announcement(title, content, type);

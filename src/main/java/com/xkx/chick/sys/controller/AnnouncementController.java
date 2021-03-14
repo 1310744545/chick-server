@@ -33,14 +33,15 @@ public class AnnouncementController extends BaseController {
     @Resource
     private IAnnouncementManagerService announcementManagerService;
 
-    @ApiOperation(value = "公告列表(分页)", position = 1, httpMethod = "GET")
+    @ApiOperation(value = "管理公告列表(分页)", position = 1, httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "current", value = "当前页码", required = true),
             @ApiImplicitParam(paramType = "query", name = "size", value = "分页数量", required = true),
             @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
             @ApiImplicitParam(name = "delFlag", value = "是否删除", paramType = "query"),
     })
-    @GetMapping("/list")
+    @PostMapping("/list")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R<Page<Announcement>> list(Integer current, Integer size, String keyword, String delFlag) {
         if (StringUtils.isNotBlank(keyword) && keyword.length() > CommonConstants.MAX_NAME_LENGTH) {
             return R.failed("关键字过长");
@@ -51,6 +52,23 @@ public class AnnouncementController extends BaseController {
         return R.ok(announcementManagerService.list(PageUtils.validPage(current, size), keyword, delFlag));
     }
 
+    @ApiOperation(value = "首页公告列表(分页)", position = 1, httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "current", value = "当前页码", required = true),
+            @ApiImplicitParam(paramType = "query", name = "size", value = "分页数量", required = true),
+            @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+            @ApiImplicitParam(name = "delFlag", value = "是否删除", paramType = "query"),
+    })
+    @GetMapping("/indexList")
+    public R<Page<Announcement>> indexList(Integer current, Integer size, String keyword, String delFlag) {
+        if (StringUtils.isNotBlank(keyword) && keyword.length() > CommonConstants.MAX_NAME_LENGTH) {
+            return R.failed("关键字过长");
+        }
+        if (!StringUtils.isNotBlank(delFlag)) {
+            return R.failed("是否删除标记为空");
+        }
+        return R.ok(announcementManagerService.list(PageUtils.validPage(current, size), keyword, delFlag));
+    }
 
     @ApiOperation(value = "删除或恢复公告", position = 1, httpMethod = "POST")
     @ApiImplicitParams({
@@ -67,7 +85,7 @@ public class AnnouncementController extends BaseController {
     }
 
 
-    @ApiOperation(value = "删除或恢复公告", position = 1, httpMethod = "POST")
+    @ApiOperation(value = "更新或添加公告", position = 1, httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "公告id", required = true),
             @ApiImplicitParam(paramType = "query", name = "title", value = "公告标题", required = true),

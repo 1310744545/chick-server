@@ -7,6 +7,7 @@ import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.controller.BaseController;
 import com.xkx.chick.common.util.PageUtils;
 import com.xkx.chick.common.util.StringUtils;
+import com.xkx.chick.sys.pojo.entity.SysFile;
 import com.xkx.chick.sys.pojo.vo.FileVO;
 import com.xkx.chick.sys.service.IFileService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,6 +18,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
@@ -47,7 +50,7 @@ public class FileController extends BaseController {
         return fileService.managerUploadFile(file, type, remarks);
     }
 
-    @ApiOperation(value = "文件列表(分页)", position = 1, httpMethod = "GET")
+    @ApiOperation(value = "文件列表(分页)", position = 1, httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "current", value = "当前页码", required = true),
             @ApiImplicitParam(paramType = "query", name = "size", value = "分页数量", required = true),
@@ -55,7 +58,7 @@ public class FileController extends BaseController {
             @ApiImplicitParam(name = "type", value = "文件类型id", paramType = "query"),
             @ApiImplicitParam(name = "delFlag", value = "是否删除", paramType = "query"),
     })
-    @GetMapping("/list")
+    @PostMapping("/list")
     @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R<Page<FileVO>> list(Integer current, Integer size, String keyword, String type, String delFlag) {
         if (StringUtils.isNotBlank(keyword) && keyword.length() > CommonConstants.MAX_NAME_LENGTH) {
@@ -92,5 +95,18 @@ public class FileController extends BaseController {
             return R.failed("删除标记或文件id为空");
         }
         return fileService.batchRemove(fileIds);
+    }
+
+    @ApiOperation(value = "获取所有某一类型的所有文件", position = 1, httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "文件类型", paramType = "query"),
+    })
+    @PostMapping("/listAllByType")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
+    public R<List<SysFile>> listAllByType(String type) {
+        if (!StringUtils.isNotBlank(type)) {
+            return R.failed("文件类行不能为空");
+        }
+        return R.ok(fileService.listAllByType(type));
     }
 }

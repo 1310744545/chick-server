@@ -1,11 +1,11 @@
 package com.xkx.chick.web.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.xkx.chick.common.domin.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("chick_tools")
-public class Tools implements Serializable {
+public class Tools extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -35,31 +35,5 @@ public class Tools implements Serializable {
      * 路径
      */
     private String path;
-
-    /**
-     * 是否逻辑删除 1是0否
-     */
-    private String delFlag;
-
-    /**
-     * 创建者
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createDate;
-
-    /**
-     * 更新者
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateDate;
-
 
 }

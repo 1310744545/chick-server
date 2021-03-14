@@ -15,10 +15,9 @@
         LEFT JOIN sys_file b ON a.file_id = b.id
         WHERE
         a.del_flag = #{delFlag}
-        <if test="keyword != null and keyword != ''">
+        <if test="keyword != null or keyword != ''">
             AND (
             a.`name` like concat('%',#{keyword},'%')
-            or a.originalFilename like concat('%',#{keyword},'%')
             )
         </if>
         ORDER BY a.create_date asc

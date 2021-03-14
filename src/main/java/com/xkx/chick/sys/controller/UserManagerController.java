@@ -3,6 +3,7 @@ package com.xkx.chick.sys.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.constant.CommonConstants;
+import com.xkx.chick.common.controller.BaseController;
 import com.xkx.chick.common.util.PageUtils;
 import com.xkx.chick.common.util.StringUtils;
 import com.xkx.chick.sys.pojo.entity.User;
@@ -11,7 +12,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,19 +27,19 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/user/manager")
-public class UserManagerController {
+public class UserManagerController extends BaseController {
     @Resource
     private IUserManagerService userManagerService;
 
 
-    @ApiOperation(value = "管理用户列表(分页)", position = 1, httpMethod = "GET")
+    @ApiOperation(value = "管理用户列表(分页)", position = 1, httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "current", value = "当前页码", required = true),
             @ApiImplicitParam(paramType = "query", name = "size", value = "分页数量", required = true),
             @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
             @ApiImplicitParam(name = "delFlag", value = "是否删除", paramType = "query"),
     })
-    @GetMapping("/list")
+    @PostMapping("/list")
     @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R<Page<User>> list(Integer current, Integer size, String keyword, String delFlag) {
         if (StringUtils.isNotBlank(keyword) && keyword.length() > CommonConstants.MAX_NAME_LENGTH) {

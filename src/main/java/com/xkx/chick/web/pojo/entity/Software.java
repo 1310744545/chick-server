@@ -1,10 +1,11 @@
 package com.xkx.chick.web.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.xkx.chick.common.domin.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -17,44 +18,29 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("chick_software")
-public class Software implements Serializable {
+public class Software extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * id
+     */
+    private String id;
     /**
      * 文件名
      */
     private String name;
 
     /**
-     * 下载链接
+     * 开发商
      */
-    private String url;
-
-    /**
-     * 是否逻辑删除 1是0否
-     */
-    private String delFlag;
-
-    /**
-     * 创建者
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createDate;
-
-    /**
-     * 更新者
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateDate;
+    private String company;
 
 
+    public Software() {
+    }
+
+    public Software(String name, String company) {
+        this.name = name;
+        this.company = company;
+    }
 }

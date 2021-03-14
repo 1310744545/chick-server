@@ -1,10 +1,11 @@
 package com.xkx.chick.web.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.xkx.chick.common.domin.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -17,9 +18,13 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("chick_message")
-public class Message implements Serializable {
+public class Message extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * id
+     */
+    private String id;
 
     /**
      * 接收消息者
@@ -37,34 +42,11 @@ public class Message implements Serializable {
     private String type;
 
     /**
-     * 是否逻辑删除 1是0否
-     */
-    private String delFlag;
-
-    /**
      * 状态 1未读 0已读
      */
     private String status;
 
-    /**
-     * 创建者
-     */
-    private String createBy;
 
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createDate;
-
-    /**
-     * 更新者
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateDate;
 
 
 }

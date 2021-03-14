@@ -60,4 +60,5 @@ public interface CommonConstants {
      */
     String ROLE_ADMIN = "ROLE_ADMIN";
     String HAS_ROLE_ADMIN = "hasRole('ROLE_ADMIN')";
+
 }

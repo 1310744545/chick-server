@@ -32,19 +32,19 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/chick/tools")
-public class ToolsController extends BaseController{
+public class ToolsController extends BaseController {
     @Resource
     private IToolsService iToolsService;
 
-
-    @ApiOperation(value = "工具列表(分页)", position = 1, httpMethod = "GET")
+    @ApiOperation(value = "工具列表(分页)", position = 1, httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "current", value = "当前页码", required = true),
             @ApiImplicitParam(paramType = "query", name = "size", value = "分页数量", required = true),
             @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
             @ApiImplicitParam(name = "delFlag", value = "是否删除", paramType = "query"),
     })
-    @GetMapping("/list")
+    @PostMapping("/list")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R<Page<ToolsVO>> list(Integer current, Integer size, String keyword, String delFlag) {
         if (StringUtils.isNotBlank(keyword) && keyword.length() > CommonConstants.MAX_NAME_LENGTH) {
             return R.failed("关键字过长");
@@ -54,7 +54,6 @@ public class ToolsController extends BaseController{
         }
         return R.ok(iToolsService.list(PageUtils.validPage(current, size), keyword, delFlag));
     }
-
 
     @ApiOperation(value = "生成UUID", position = 1, httpMethod = "GET")
     @ApiImplicitParams({
