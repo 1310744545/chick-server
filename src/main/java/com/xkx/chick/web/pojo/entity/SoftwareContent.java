@@ -37,6 +37,11 @@ public class SoftwareContent extends BaseEntity implements Serializable {
     private String fileId;
 
     /**
+     * 系统
+     */
+    private String system;
+
+    /**
      * 版本号
      */
     private String versions;

@@ -55,6 +55,21 @@ public class ToolsController extends BaseController {
         return R.ok(iToolsService.list(PageUtils.validPage(current, size), keyword, delFlag));
     }
 
+    @ApiOperation(value = "删除或恢复工具", position = 1, httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "toolId", value = "文件id", required = true),
+            @ApiImplicitParam(paramType = "query", name = "delFlag", value = "当前删除状态", required = true),
+    })
+    @PostMapping("/deleteOrRenew")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
+    public R deleteOrRenew(String toolId, String delFlag) {
+        if (toolId == null){
+            return R.failed("删除标记或文件id为空");
+        }
+        return iToolsService.deleteOrRenew(toolId, delFlag);
+    }
+
+
     @ApiOperation(value = "生成UUID", position = 1, httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "count", value = "生成个数", required = true),

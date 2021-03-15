@@ -35,12 +35,18 @@ public class Software extends BaseEntity implements Serializable {
      */
     private String company;
 
+    /**
+     * 软件描述
+     */
+    private String description;
+
 
     public Software() {
     }
 
-    public Software(String name, String company) {
+    public Software(String name, String company, String description) {
         this.name = name;
         this.company = company;
+        this.description = description;
     }
 }

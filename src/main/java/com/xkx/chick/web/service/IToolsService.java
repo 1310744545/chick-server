@@ -31,6 +31,14 @@ public interface IToolsService extends IService<Tools> {
     Page<ToolsVO> list(Page<ToolsVO> validPage, String keyword, String delFlag);
 
     /**
+     * 删除或恢复工具
+     *
+     * @param toolId 文件id
+     * @return R
+     */
+    R deleteOrRenew(String toolId, String delFlag);
+
+    /**
      * 生成UUID
      *
      * @param count 生成个数

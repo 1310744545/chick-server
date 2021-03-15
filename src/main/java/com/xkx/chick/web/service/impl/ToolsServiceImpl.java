@@ -1,8 +1,10 @@
 package com.xkx.chick.web.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xkx.chick.common.base.R;
+import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.util.QRCodeUtil;
 import com.xkx.chick.web.constant.ChickConstant;
 import com.xkx.chick.web.mapper.ToolsMapper;
@@ -57,6 +59,26 @@ public class ToolsServiceImpl extends ServiceImpl<ToolsMapper, Tools> implements
 //            wrapper.and(wr -> wr.like(Tools::getName, keyword));
 //        }
 //        return baseMapper.selectPage(validPage, wrapper);
+    }
+
+    /**
+     * 删除或恢复工具
+     *
+     * @param toolId 文件id
+     * @return R
+     */
+    @Override
+    public R deleteOrRenew(String toolId, String delFlag) {
+        int update = baseMapper.update(null, Wrappers.<Tools>lambdaUpdate()
+                .eq(Tools::getId, toolId)
+                .set(Tools::getDelFlag, CommonConstants.DELETE_FLAG.equals(delFlag) ? CommonConstants.UN_DELETE_FLAG:CommonConstants.DELETE_FLAG));
+        if (update > 0 && CommonConstants.DELETE_FLAG.equals(delFlag)){
+            return R.ok("删除成功");
+        }else if (update > 0 && CommonConstants.UN_DELETE_FLAG.equals(delFlag)){
+            return R.ok("恢复成功");
+        }else {
+            return R.failed("系统错误,请联系站长");
+        }
     }
 
     /**

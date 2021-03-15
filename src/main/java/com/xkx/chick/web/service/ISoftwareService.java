@@ -1,10 +1,9 @@
 package com.xkx.chick.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.web.pojo.entity.Software;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.xkx.chick.web.pojo.vo.ToolsVO;
 
 /**
  * <p>
@@ -24,7 +23,15 @@ public interface ISoftwareService extends IService<Software> {
      * @param delFlag 删除标记
      * @return R
      */
-    Page<ToolsVO> list(Page<ToolsVO> validPage, String keyword, String delFlag);
+    Page<Software> list(Page<Software> validPage, String keyword, String delFlag);
+
+    /**
+     * 删除或恢复软件
+     *
+     * @param softwareId 软件id
+     * @return R
+     */
+    R deleteOrRenew(String softwareId, String delFlag);
 
     /**
      * 更新或添加软件
@@ -32,5 +39,5 @@ public interface ISoftwareService extends IService<Software> {
      * @param id 公告
      * @return R
      */
-    R editSoftware(String id, String title, String content);
+    R editSoftware(String id, String title, String content, String description);
 }
