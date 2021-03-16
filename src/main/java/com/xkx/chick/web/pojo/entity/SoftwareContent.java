@@ -47,5 +47,14 @@ public class SoftwareContent extends BaseEntity implements Serializable {
     private String versions;
 
 
+    public SoftwareContent() {
+    }
 
+    public SoftwareContent(String id, String softwareId, String fileId, String system, String versions) {
+        this.id = id;
+        this.softwareId = softwareId;
+        this.fileId = fileId;
+        this.system = system;
+        this.versions = versions;
+    }
 }

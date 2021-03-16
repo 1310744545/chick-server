@@ -37,4 +37,7 @@ public interface ChickConstant {
      */
     List<String> RUBBISH_CHARACTER = Arrays.asList("1", "i", "I", "0", "o", "O");
 
+
+    String COMMON_TYPE = "00000000-0000-0000-0000-000000000000";
+
 }

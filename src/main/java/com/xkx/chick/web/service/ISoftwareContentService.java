@@ -1,7 +1,9 @@
 package com.xkx.chick.web.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xkx.chick.common.base.R;
 import com.xkx.chick.web.pojo.entity.SoftwareContent;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -12,5 +14,11 @@ import com.xkx.chick.web.pojo.entity.SoftwareContent;
  * @since 2021-03-13
  */
 public interface ISoftwareContentService extends IService<SoftwareContent> {
-
+    /**
+     * 上传软件
+     *
+     * @param file 文件
+     * @return R
+     */
+    R uploadFile(MultipartFile file, String softwareId, String versions, String system);
 }
