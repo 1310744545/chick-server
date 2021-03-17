@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.baomidou.ant.chick.mapper.SoftwareContentMapper">
+<mapper namespace="com.xkx.chick.web.mapper.SoftwareContentMapper">
+    <select id="listById" resultType="com.xkx.chick.web.pojo.vo.SoftwareContentVO">
+        select a.id,
+               a.software_id,
+               a.file_id,
+               a.versions,
+               a.`system`,
+               a.del_flag,
+               a.create_by,
+               a.create_date,
+               a.update_by,
+               a.update_date,
+               b.name as fileName,
+               b.url
+        from
+        chick_software_content a LEFT JOIN sys_file b on a.file_id = b.id
+        where
+        a.software_id =#{softwareId}
+    </select>
 
+    <delete id="realDelete" parameterType="String">
+        delete from chick_software_content where id = #{softwareContentId}
+    </delete>
 </mapper>

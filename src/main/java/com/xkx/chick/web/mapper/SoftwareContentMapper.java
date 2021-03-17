@@ -1,7 +1,9 @@
 package com.xkx.chick.web.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xkx.chick.web.pojo.entity.SoftwareContent;
+import com.xkx.chick.web.pojo.vo.SoftwareContentVO;
 
 /**
  * <p>
@@ -13,4 +15,7 @@ import com.xkx.chick.web.pojo.entity.SoftwareContent;
  */
 public interface SoftwareContentMapper extends BaseMapper<SoftwareContent> {
 
+    Page<SoftwareContentVO> listById(Page<SoftwareContentVO> validPage, String softwareId);
+
+    int realDelete(String softwareContentId);
 }

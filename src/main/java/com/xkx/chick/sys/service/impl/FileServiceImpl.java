@@ -58,7 +58,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, SysFile> implements
         //关闭OSSClient
         ossClient.shutdown();
         //获取地址
-        String url  = OSSClientConstants.URL_Head + zdx.getValue()+"manager/" + file.getOriginalFilename();
+        String url  = OSSClientConstants.URL_HEAD + zdx.getValue()+"manager/" + file.getOriginalFilename();
 
         //先通过md5ket去数据库中检查是否已经上传,如果是则不在向数据库中插入
         SysFile sysFile = baseMapper.selectOne(Wrappers.<SysFile>lambdaQuery()

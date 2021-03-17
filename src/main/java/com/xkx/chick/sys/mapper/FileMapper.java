@@ -17,4 +17,6 @@ import org.apache.ibatis.annotations.Param;
 public interface FileMapper extends BaseMapper<SysFile> {
 
     Page<FileVO> getList(Page<SysFile> validPage, @Param("keyword") String keyword, @Param("type")String type, @Param("delFlag")String delFlag);
+
+    int realDelete(String fileId);
 }

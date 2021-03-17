@@ -8,7 +8,7 @@ package com.xkx.chick.common.constant;
  */
 public class OSSClientConstants{
     //阿里云外网地址开头
-    public static final String URL_Head = "http://chickweb.oss-cn-beijing.aliyuncs.com/";
+    public static final String URL_HEAD = "http://chickweb.oss-cn-beijing.aliyuncs.com/";
     //阿里云API的外网域名
     public static final String ENDPOINT = "oss-cn-beijing.aliyuncs.com";
     //阿里云API的密钥Access Key ID
@@ -28,6 +28,9 @@ public class OSSClientConstants{
     public static final String FILM_FILES = "filmFiles/";
     //文章图片
     public static final String WRITING_IMAGE = "writingImg/";
+
+    //软件文件
+    public static final String SOFTWARE = "software/";
 }
     
     
