@@ -36,7 +36,7 @@ public class SoftwareServiceImpl extends ServiceImpl<SoftwareMapper, Software> i
     public Page<Software> list(Page<Software> validPage, String keyword, String delFlag) {
         LambdaQueryWrapper<Software> wrapper = Wrappers.<Software>lambdaQuery()
                 .eq(Software::getDelFlag, delFlag)
-                .orderByAsc(Software::getCreateDate);
+                .orderByDesc(Software::getCreateDate);
         if (StringUtils.isNotBlank(keyword)) {
             wrapper.and(wr -> wr.like(Software::getName, keyword));
         }
