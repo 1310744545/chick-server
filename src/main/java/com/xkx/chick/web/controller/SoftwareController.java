@@ -8,11 +8,14 @@ import com.xkx.chick.common.controller.BaseController;
 import com.xkx.chick.common.util.PageUtils;
 import com.xkx.chick.common.util.StringUtils;
 import com.xkx.chick.web.pojo.entity.Software;
+import com.xkx.chick.web.pojo.vo.SoftwareContentDetailVO;
+import com.xkx.chick.web.pojo.vo.SoftwareDetailVO;
 import com.xkx.chick.web.service.ISoftwareService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -80,5 +83,35 @@ public class SoftwareController extends BaseController {
             return R.failed("删除标记或文件id为空");
         }
         return softwareService.deleteOrRenew(softwareId, delFlag);
+    }
+
+    @ApiOperation(value = "软件下载前台页(分页)", position = 1, httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "current", value = "当前页码", required = true),
+            @ApiImplicitParam(paramType = "query", name = "size", value = "分页数量", required = true),
+            @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+            @ApiImplicitParam(name = "delFlag", value = "是否删除", paramType = "query"),
+    })
+    @GetMapping("/softwareAndContentList")
+    public R<Page<SoftwareDetailVO>> softwareAndContentList(Integer current, Integer size, String keyword, String delFlag) {
+        if (StringUtils.isNotBlank(keyword) && keyword.length() > CommonConstants.MAX_NAME_LENGTH) {
+            return R.failed("关键字过长");
+        }
+        if (!StringUtils.isNotBlank(delFlag)) {
+            return R.failed("是否删除标记为空");
+        }
+        return R.ok(softwareService.softwareAndContentList(PageUtils.validPage(current, size), keyword, delFlag));
+    }
+
+    @ApiOperation(value = "软件所有内容", position = 1, httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "current", value = "softwareId", required = true),
+    })
+    @GetMapping("/softwareAllContentList")
+    public R<SoftwareContentDetailVO> softwareAllContentList(String softwareId) {
+        if (!StringUtils.isNotBlank(softwareId)) {
+            return R.failed("软件id为空");
+        }
+        return R.ok(softwareService.softwareAllContentList(softwareId));
     }
 }

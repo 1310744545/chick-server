@@ -7,12 +7,21 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.util.StringUtils;
+import com.xkx.chick.web.mapper.SoftwareContentMapper;
 import com.xkx.chick.web.mapper.SoftwareMapper;
 import com.xkx.chick.web.pojo.entity.Software;
+import com.xkx.chick.web.pojo.vo.SoftwareContentDetailVO;
+import com.xkx.chick.web.pojo.vo.SoftwareDetailVO;
+import com.xkx.chick.web.pojo.vo.VersionAndContentVO;
 import com.xkx.chick.web.service.ISoftwareService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -24,6 +33,10 @@ import java.util.UUID;
  */
 @Service
 public class SoftwareServiceImpl extends ServiceImpl<SoftwareMapper, Software> implements ISoftwareService {
+
+    @Autowired
+    private SoftwareContentMapper softwareContentMapper;
+
     /**
      * 获取软件列表
      *
@@ -87,5 +100,25 @@ public class SoftwareServiceImpl extends ServiceImpl<SoftwareMapper, Software> i
                 return R.ok("系统错误,更新失败");
             }
         }
+    }
+
+    @Override
+    public Page<SoftwareDetailVO> softwareAndContentList(Page<SoftwareDetailVO> validPage, String keyword, String delFlag) {
+
+        return baseMapper.softwareAndContentList(validPage, keyword, delFlag);
+    }
+
+    @Override
+    public SoftwareContentDetailVO softwareAllContentList(String softwareId) {
+        Software software = baseMapper.selectById(softwareId);
+        SoftwareContentDetailVO softwareContentDetailVO = new SoftwareContentDetailVO(software);
+        List<String> versions = softwareContentMapper.selectAllVersion(softwareId);
+        List<String> collect = versions.stream().distinct().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        ArrayList<VersionAndContentVO> versionAndContentVOS = new ArrayList<>();
+        for (String version : collect) {
+            versionAndContentVOS.add(softwareContentMapper.getVersionAndContent(version, softwareId));
+        }
+        softwareContentDetailVO.setVersionAndContentVOS(versionAndContentVOS);
+        return softwareContentDetailVO;
     }
 }

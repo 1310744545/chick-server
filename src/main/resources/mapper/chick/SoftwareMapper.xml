@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xkx.chick.web.mapper.SoftwareMapper">
 
+    <select id="softwareAndContentList" resultType="com.xkx.chick.web.pojo.vo.SoftwareDetailVO">
+        select a.id,
+               `name`,
+               company,
+               description,
+               (select versions from chick_software_content where software_id = a.id and `system` = 'windows' order by versions desc limit 1) as mostNewWindowsVersions,
+			   (select versions from chick_software_content where software_id = a.id and `system` = 'linux' order by versions desc limit 1) as mostNewLinuxVersions,
+			   (select versions from chick_software_content where software_id = a.id and `system` = 'mac' order by versions desc limit 1) as mostNewMacVersions,
+               (select url from sys_file b where b.id = (select file_id from chick_software_content where software_id = a.id and `system` = 'windows' order by versions desc limit 1)) as windows,
+               (select url from sys_file b where b.id = (select file_id from chick_software_content where software_id = a.id and `system` = 'linux' order by versions desc limit 1)) as linux,
+               (select url from sys_file b where b.id = (select file_id from chick_software_content where software_id = a.id and `system` = 'mac' order by versions desc limit 1)) as mac
+        from chick_software a
+        where a.del_flag = '0'
+    </select>
 </mapper>

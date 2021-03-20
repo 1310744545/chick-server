@@ -23,4 +23,19 @@
     <delete id="realDelete" parameterType="String">
         delete from chick_software_content where id = #{softwareContentId}
     </delete>
+
+    <select id="selectAllVersion" resultType="string" parameterType="string">
+        select versions from chick_software_content where software_id = #{softwareId}
+    </select>
+
+    <select id="getVersionAndContent" resultType="com.xkx.chick.web.pojo.vo.VersionAndContentVO" parameterType="string">
+        SELECT
+            #{param1} as versions,
+            (select url from sys_file where id = (select file_id from chick_software_content where versions = #{param1} and software_id = #{param2} and `system` = 'windows' )) as windows,
+            (select url from sys_file where id = (select file_id from chick_software_content where versions = #{param1} and software_id = #{param2} and `system` = 'linux' )) as linux,
+            (select url from sys_file where id = (select file_id from chick_software_content where versions = #{param1} and software_id = #{param2} and `system` = 'mac'))  as mac
+        from
+            chick_software_content
+        where software_id = #{param2} and versions = #{param1}
+    </select>
 </mapper>

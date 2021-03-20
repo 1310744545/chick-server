@@ -5,6 +5,8 @@ import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.util.PageUtils;
 import com.xkx.chick.common.util.StringUtils;
+import com.xkx.chick.sys.pojo.entity.Announcement;
+import com.xkx.chick.sys.service.IAnnouncementManagerService;
 import com.xkx.chick.web.pojo.entity.Software;
 import com.xkx.chick.web.pojo.vo.ToolsVO;
 import com.xkx.chick.web.service.ISoftwareService;
@@ -32,6 +34,8 @@ public class GetController {
     private IToolsService iToolsService;
     @Resource
     private ISoftwareService softwareService;
+    @Resource
+    private IAnnouncementManagerService announcementManagerService;
 
     @ApiOperation(value = "工具列表(分页)", position = 1, httpMethod = "GET")
     @ApiImplicitParams({
@@ -51,7 +55,7 @@ public class GetController {
         return R.ok(iToolsService.list(PageUtils.validPage(current, size), keyword, delFlag));
     }
 
-    @ApiOperation(value = "软件(分页)", position = 1, httpMethod = "GET")
+    @ApiOperation(value = "软件首页(分页)", position = 1, httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "current", value = "当前页码", required = true),
             @ApiImplicitParam(paramType = "query", name = "size", value = "分页数量", required = true),
@@ -68,4 +72,17 @@ public class GetController {
         }
         return R.ok(softwareService.list(PageUtils.validPage(current, size), keyword, delFlag));
     }
+
+    @ApiOperation(value = "软件首页(分页)", position = 1, httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "announcementId", value = "公告id", required = true),
+    })
+    @GetMapping("/announcementDetail")
+    public R<Announcement> announcementDetail(String announcementId) {
+        if (!StringUtils.isNotBlank(announcementId)) {
+            return R.failed("公告id为空");
+        }
+        return R.ok(announcementManagerService.getById(announcementId));
+    }
+
 }
