@@ -1,9 +1,10 @@
 package com.xkx.chick.sys.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -23,12 +24,12 @@ public class RoleMenu implements Serializable {
     /**
      * 角色ID
      */
-    private Integer roleId;
+    private String roleId;
 
     /**
      * 菜单ID
      */
-    private Integer menuId;
+    private String menuId;
 
 
 }

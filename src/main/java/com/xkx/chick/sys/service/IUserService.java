@@ -1,10 +1,10 @@
 package com.xkx.chick.sys.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.sys.pojo.entity.Role;
 import com.xkx.chick.sys.pojo.entity.User;
-import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -80,4 +80,11 @@ public interface IUserService extends IService<User> {
      * @return
      */
     User getUserByJwt(String JwtToken);
+
+    /**
+     * 上传头像
+     * @param userId 用户id
+     * @return
+     */
+    R uploadHeadPortrait(MultipartFile file, String userId);
 }

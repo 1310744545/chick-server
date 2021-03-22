@@ -1,9 +1,10 @@
 package com.xkx.chick.sys.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -23,12 +24,12 @@ public class UserRole implements Serializable {
     /**
      * 用户ID
      */
-    private Integer userId;
+    private String userId;
 
     /**
      * 角色ID
      */
-    private Integer roleId;
+    private String roleId;
 
 
 }

@@ -42,6 +42,7 @@ public class SoftwareContentServiceImpl extends ServiceImpl<SoftwareContentMappe
     private FileMapper fileMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public R uploadFile(MultipartFile file, String softwareId, String versions, String system) {
 
         Software software = softwareMapper.selectById(softwareId);

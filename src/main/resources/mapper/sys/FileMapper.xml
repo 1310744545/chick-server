@@ -22,6 +22,7 @@
         LEFT JOIN sys_user c ON a.create_by = c.user_id
         WHERE
         a.del_flag = #{delFlag}
+        and a.type != '00000000-0000-0000-0000-000000000000'
         <if test="type != null and type != ''">
             AND b.id = #{type}
         </if>

@@ -17,6 +17,7 @@ import com.xkx.chick.sys.pojo.entity.Zdx;
 import com.xkx.chick.sys.pojo.vo.FileVO;
 import com.xkx.chick.sys.service.IFileService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -48,6 +49,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, SysFile> implements
      * @return R
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public R managerUploadFile(MultipartFile file, String type, String remarks) {
         //获取对应类型的存储路径
         Zdx zdx = zdxMapper.selectById(type);

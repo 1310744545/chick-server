@@ -110,14 +110,20 @@ public class SoftwareServiceImpl extends ServiceImpl<SoftwareMapper, Software> i
 
     @Override
     public SoftwareContentDetailVO softwareAllContentList(String softwareId) {
+        //通过软件id获取软件
         Software software = baseMapper.selectById(softwareId);
+        //新建软件VO
         SoftwareContentDetailVO softwareContentDetailVO = new SoftwareContentDetailVO(software);
+        //获取所有的版本
         List<String> versions = softwareContentMapper.selectAllVersion(softwareId);
+        //去除重复版本
         List<String> collect = versions.stream().distinct().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        //新建版本列表
         ArrayList<VersionAndContentVO> versionAndContentVOS = new ArrayList<>();
         for (String version : collect) {
             versionAndContentVOS.add(softwareContentMapper.getVersionAndContent(version, softwareId));
         }
+        //软件VO赋值版本列表
         softwareContentDetailVO.setVersionAndContentVOS(versionAndContentVOS);
         return softwareContentDetailVO;
     }

@@ -35,7 +35,7 @@
             (select url from sys_file where id = (select file_id from chick_software_content where versions = #{param1} and software_id = #{param2} and `system` = 'linux' )) as linux,
             (select url from sys_file where id = (select file_id from chick_software_content where versions = #{param1} and software_id = #{param2} and `system` = 'mac'))  as mac
         from
-            chick_software_content
-        where software_id = #{param2} and versions = #{param1}
+            chick_software
+        where id = #{param2}
     </select>
 </mapper>

@@ -1,23 +1,26 @@
 package com.xkx.chick.sys.service.impl;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.aliyun.oss.OSSClient;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.security.UserInfoDetail;
 import com.xkx.chick.common.security.service.UserDetailServiceImpl;
+import com.xkx.chick.common.util.AliyunOSSClientUtil;
 import com.xkx.chick.common.util.JwtUtils;
 import com.xkx.chick.common.util.SecurityUtils;
 import com.xkx.chick.common.util.StringUtils;
-import com.xkx.chick.sys.pojo.entity.Role;
-import com.xkx.chick.sys.pojo.entity.User;
+import com.xkx.chick.sys.mapper.FileMapper;
 import com.xkx.chick.sys.mapper.UserMapper;
+import com.xkx.chick.sys.mapper.ZdxMapper;
+import com.xkx.chick.sys.pojo.entity.Role;
+import com.xkx.chick.sys.pojo.entity.SysFile;
+import com.xkx.chick.sys.pojo.entity.User;
+import com.xkx.chick.sys.pojo.entity.Zdx;
 import com.xkx.chick.sys.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
@@ -26,15 +29,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import static com.xkx.chick.common.constant.OSSClientConstants.BACKET_NAME;
+import static com.xkx.chick.common.constant.OSSClientConstants.URL_HEAD;
 
 /**
  * <p>
@@ -59,6 +66,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private String head;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private AliyunOSSClientUtil aliyunOSSClientUtil;
+    @Resource
+    private ZdxMapper zdxMapper;
+    @Resource
+    private FileMapper fileMapper;
 
     /**
      * 查询是否存在该用户
@@ -191,5 +204,46 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                         User::getEmail, User::getLockFlag, User::getEnabledFlag, User::getLastLoginTime,
                         User::getDelFlag, User::getHeadPortraitUrl)
                 .eq(User::getUserId, id));
+    }
+
+    /**
+     * 上传头像
+     * @param userId 用户id
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public R uploadHeadPortrait(MultipartFile file, String userId) {
+        //用户头像的字典项
+        Zdx zdx = zdxMapper.selectOne(Wrappers.<Zdx>lambdaQuery().eq(Zdx::getName, "用户头像"));
+        //初始化OSSClient
+        OSSClient ossClient = aliyunOSSClientUtil.getOSSClient();
+        //上传文件,返回唯一key
+        System.out.println(file.getOriginalFilename());
+        String md5key = AliyunOSSClientUtil.uploadObject2OSS(ossClient, file, BACKET_NAME, zdx.getValue() + userId +"/");
+        //关闭OSSClient
+        ossClient.shutdown();
+        //获取地址
+        String url  = URL_HEAD + zdx.getValue() + userId +"/" + file.getOriginalFilename();
+
+        //先通过md5ket去数据库中检查是否已经上传,如果是则不在向数据库中插入
+        SysFile sysFile = fileMapper.selectOne(Wrappers.<SysFile>lambdaQuery()
+                .eq(SysFile::getMd5key, md5key)
+                .eq(SysFile::getDelFlag, CommonConstants.DELETE_FLAG));
+        //插入文件表
+        if (ObjectUtils.isEmpty(sysFile)){
+            String uuid= UUID.randomUUID().toString();
+            sysFile = new SysFile(uuid, md5key, file.getOriginalFilename(), zdx.getId(), url, file.getOriginalFilename(), file.getSize());
+            if (fileMapper.insert(sysFile) < 1) {
+                return R.failed("上传失败");
+            }
+        }
+        //更改用户头像
+        User user = getById(userId);
+        user.setHeadPortraitUrl(url);
+        if (userMapper.updateById(user) < 1){
+            return R.failed("上传失败");
+        }
+        return R.ok("上传成功");
     }
 }
