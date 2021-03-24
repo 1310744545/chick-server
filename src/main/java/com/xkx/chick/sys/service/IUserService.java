@@ -87,4 +87,16 @@ public interface IUserService extends IService<User> {
      * @return
      */
     R uploadHeadPortrait(MultipartFile file, String userId);
+
+    /**
+     * 更新用户
+     * @param userId 用户id
+     * @param sex 用户id
+     * @param phone 用户id
+     * @param name 用户id
+     * @param email 用户id
+     * @param email 用户id
+     * @return
+     */
+    R updateUser(String userId, String sex, String phone, String name, String email, String birthday);
 }

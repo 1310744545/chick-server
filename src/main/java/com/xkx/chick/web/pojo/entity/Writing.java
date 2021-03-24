@@ -39,22 +39,27 @@ public class Writing extends BaseEntity implements Serializable {
     /**
      * 评论数
      */
-    private String comment;
+    private int commentAmount;
 
     /**
      * 点赞数
      */
-    private String like;
+    private int likeAmount;
 
     /**
      * 阅读数
      */
-    private String read;
+    private int readAmount;
+
+    /**
+     * 收藏数
+     */
+    private int collectAmount;
 
     /**
      * 分类标签id,以逗号分割
      */
-    private String tag;
+    private String type;
 
     /**
      * 是否置顶 0否 1是
@@ -71,6 +76,16 @@ public class Writing extends BaseEntity implements Serializable {
      */
     private String essence;
 
+    public Writing() {
+    }
 
-
+    public Writing(String id, String title, String content, String type, String top, String recommend, String essence) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.type = type;
+        this.top = top;
+        this.recommend = recommend;
+        this.essence = essence;
+    }
 }

@@ -200,7 +200,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public User getUserByJwt(String JwtToken) {
         String id = jwtUtils.getIDFromToken(JwtToken.split(" ")[1]);
         return baseMapper.selectOne(Wrappers.<User>lambdaQuery()
-                .select(User::getUsername, User::getName, User::getBirthday, User::getSex, User::getPhone,
+                .select(User::getUserId, User::getUsername, User::getName, User::getBirthday, User::getSex, User::getPhone,
                         User::getEmail, User::getLockFlag, User::getEnabledFlag, User::getLastLoginTime,
                         User::getDelFlag, User::getHeadPortraitUrl)
                 .eq(User::getUserId, id));
@@ -245,5 +245,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             return R.failed("上传失败");
         }
         return R.ok("上传成功");
+    }
+
+    @Override
+    public R updateUser(String userId, String sex, String phone, String name, String email, String birthday) {
+        User user = new User(userId, name, sex, birthday, phone, email);
+        int i = baseMapper.updateById(user);
+        if (i == 1){
+            return R.ok("更新成功");
+        }
+        return R.failed("更新失败");
     }
 }

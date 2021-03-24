@@ -3,6 +3,7 @@ package com.xkx.chick.sys.controller;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.xkx.chick.common.base.R;
+import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.controller.BaseController;
 import com.xkx.chick.common.util.JwtUtils;
 import com.xkx.chick.common.util.SecurityUtils;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -135,7 +137,7 @@ public class UserController extends BaseController {
      * 通过jwt获取用户信息
      * @return
      */
-    @ApiOperation(value = "注册", httpMethod = "POST")
+    @ApiOperation(value = "获取用户信息", httpMethod = "POST")
     @PostMapping("/getUserByJwt")
     public R getUserByJwt(HttpServletRequest request) {
         if (StringUtils.isBlank(request.getHeader(jwtUtils.getHeader()))){
@@ -144,12 +146,12 @@ public class UserController extends BaseController {
         return R.ok(userService.getUserByJwt(request.getHeader(jwtUtils.getHeader())));
     }
 
-    @ApiOperation(value = "管理上传文件", position = 1, httpMethod = "POST")
+    @ApiOperation(value = "更换头像", position = 1, httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "文件类型id", paramType = "query"),
-            @ApiImplicitParam(name = "id", value = "用户id", paramType = "query"),
     })
     @PostMapping("/uploadHeadPortrait")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
     public R uploadHeadPortrait(@RequestParam(name = "file") MultipartFile file){
         if (ObjectUtils.isEmpty(file)){
             return R.failed("请上传文件");
@@ -157,4 +159,17 @@ public class UserController extends BaseController {
         return userService.uploadHeadPortrait(file, SecurityUtils.getUserId());
     }
 
+    @ApiOperation(value = "更换头像", position = 1, httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "文件类型id", paramType = "query"),
+    })
+    @PostMapping("/updateUser")
+    @PreAuthorize(CommonConstants.HAS_ROLE_ADMIN)
+    public R updateUser(String userId, String sex, String phone, String name, String email, String birthday){
+        if (StringUtils.isBlank(userId)){
+            return R.failed("用户id为空");
+        }
+
+        return userService.updateUser(userId, sex, phone, name, email, birthday);
+    }
 }
