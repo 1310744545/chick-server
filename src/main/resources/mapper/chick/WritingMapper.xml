@@ -2,4 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xkx.chick.web.mapper.WritingMapper">
 
+    <select id="indexList" resultType="com.xkx.chick.web.pojo.vo.WritingVO">
+        select
+            id,
+            a.user_id as userId,
+            (select `name` from sys_user b where b.user_id = a.user_id) as name,
+            (select head_portrait_url from sys_user b where b.user_id = a.user_id) as userHeadPortraitUrl,
+            title,
+            content,
+            comment_amount as commentAmount,
+            like_amount as likeAmount,
+            read_amount as readAmount,
+            collect_amount as collectAmount,
+            `type`,
+            (select `value` from sys_zdx c where c.id = a.type) as typeName,
+            top,
+            recommend,
+            essence,
+            del_flag as delFlag,
+            create_by as createBy,
+            create_date as createDate,
+            update_by as updateBy,
+            update_date as updateDate
+        from
+            chick_writing a
+        where
+            a.del_flag = #{delFlag}
+            <if test="keyword != null and keyword != ''">
+                and a.title = #{keyword}
+            </if>
+    </select>
 </mapper>

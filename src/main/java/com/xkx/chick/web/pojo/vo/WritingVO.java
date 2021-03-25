@@ -1,26 +1,20 @@
-package com.xkx.chick.web.pojo.entity;
+package com.xkx.chick.web.pojo.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.xkx.chick.common.domin.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
 /**
- * <p>
- * 帖子
- * </p>
- *
- * @author 肖可欣
- * @since 2021-02-28
+ * @ClassName WritingVO
+ * @Author xiaokexin
+ * @Date 2021/3/25 22:00
+ * @Description WritingVO
+ * @Version 1.0
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@TableName("chick_writing")
-public class Writing extends BaseEntity implements Serializable {
+public class WritingVO extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     /**
      * id
      */
@@ -30,6 +24,16 @@ public class Writing extends BaseEntity implements Serializable {
      * userId
      */
     private String userId;
+
+    /**
+     * username
+     */
+    private String name;
+
+    /**
+     * userHeadPortraitUrl
+     */
+    private String userHeadPortraitUrl;
 
     /**
      * 标题
@@ -67,6 +71,11 @@ public class Writing extends BaseEntity implements Serializable {
     private String type;
 
     /**
+     * 标签名称
+     */
+    private String typeName;
+
+    /**
      * 是否置顶 0否 1是
      */
     private String top;
@@ -81,17 +90,4 @@ public class Writing extends BaseEntity implements Serializable {
      */
     private String essence;
 
-    public Writing() {
-    }
-
-    public Writing(String id, String userId, String title, String content, String type, String top, String recommend, String essence) {
-        this.id = id;
-        this.userId = userId;
-        this.title = title;
-        this.content = content;
-        this.type = type;
-        this.top = top;
-        this.recommend = recommend;
-        this.essence = essence;
-    }
 }

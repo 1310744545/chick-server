@@ -169,7 +169,9 @@ public class UserController extends BaseController {
         if (StringUtils.isBlank(userId)){
             return R.failed("用户id为空");
         }
-
+        if (!getUserId().equals(userId)){
+            return R.failed("无权操作");
+        }
         return userService.updateUser(userId, sex, phone, name, email, birthday);
     }
 }

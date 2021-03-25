@@ -1,7 +1,10 @@
 package com.xkx.chick.web.mapper;
 
-import com.xkx.chick.web.pojo.entity.Writing;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xkx.chick.web.pojo.entity.Writing;
+import com.xkx.chick.web.pojo.vo.WritingVO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface WritingMapper extends BaseMapper<Writing> {
 
+    Page<WritingVO> indexList(Page<WritingVO> validPage, @Param("keyword") String keyword,@Param("delFlag") String delFlag);
 }
