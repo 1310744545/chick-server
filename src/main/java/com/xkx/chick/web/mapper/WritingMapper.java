@@ -17,4 +17,6 @@ import org.apache.ibatis.annotations.Param;
 public interface WritingMapper extends BaseMapper<Writing> {
 
     Page<WritingVO> indexList(Page<WritingVO> validPage, @Param("keyword") String keyword,@Param("delFlag") String delFlag);
+
+    WritingVO getWriteContent(String writingId);
 }

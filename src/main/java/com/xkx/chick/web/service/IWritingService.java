@@ -30,4 +30,11 @@ public interface IWritingService extends IService<Writing> {
      *  @return 字典项列表
      */
     Page<WritingVO> indexList(Page<WritingVO> validPage, String keyword, String delFlag);
+
+    /**
+     *  获取首页文章列表
+     *  @param writingId 文章idz
+     *  @return 字典项列表
+     */
+    WritingVO getWriteContent(String writingId);
 }

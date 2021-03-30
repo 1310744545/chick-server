@@ -49,4 +49,9 @@ public class WritingServiceImpl extends ServiceImpl<WritingMapper, Writing> impl
     public Page<WritingVO> indexList(Page<WritingVO> validPage, String keyword, String delFlag) {
         return baseMapper.indexList(validPage, keyword, delFlag);
     }
+
+    @Override
+    public WritingVO getWriteContent(String writingId) {
+        return baseMapper.getWriteContent(writingId);
+    }
 }

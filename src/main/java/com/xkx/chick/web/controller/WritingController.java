@@ -61,4 +61,16 @@ public class WritingController extends BaseController {
         }
         return R.ok(writingService.indexList(PageUtils.validPage(current, size), keyword, delFlag));
     }
+
+    @ApiOperation(value = "获取文章内容", httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "id", value = "文章id", required = true),
+    })
+    @GetMapping("/getWriteContent")
+    public R<WritingVO> getWriteContent(String writingId) {
+        if (writingId == null || "".equals(writingId)) {
+            return R.failed("文章id为空");
+        }
+        return R.ok(writingService.getWriteContent(writingId));
+    }
 }
