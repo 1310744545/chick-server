@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xkx.chick.sys.mapper.ZdxMapper">
 
+    <select id="selectByZdId" parameterType="string" resultType="com.xkx.chick.sys.pojo.entity.Zdx">
+        select * from sys_zdx where zdid =#{zdId}
+    </select>
 </mapper>

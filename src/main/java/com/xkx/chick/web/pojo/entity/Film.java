@@ -34,6 +34,11 @@ public class Film extends BaseEntity implements Serializable {
     private String name;
 
     /**
+     * 英文名字
+     */
+    private String englishName;
+
+    /**
      * 封面图片地址
      */
     @TableField("coverUrl")
@@ -43,6 +48,16 @@ public class Film extends BaseEntity implements Serializable {
      * 导演
      */
     private String director;
+
+    /**
+     * 电视台
+     */
+    private String television;
+
+    /**
+     * 状态
+     */
+    private String statue;
 
     /**
      * 编剧
@@ -60,7 +75,12 @@ public class Film extends BaseEntity implements Serializable {
     private String type;
 
     /**
-     * 国家
+     * 官方网站
+     */
+    private String officialWebsite;
+
+    /**
+     * 国家/地区
      */
     private String country;
 
@@ -111,5 +131,8 @@ public class Film extends BaseEntity implements Serializable {
     private String tag;
 
 
-
+    /**
+     * 电影更新时间
+     */
+    private String filmUpdateTime;
 }

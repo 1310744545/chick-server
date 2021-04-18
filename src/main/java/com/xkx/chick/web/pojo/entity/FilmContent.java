@@ -32,6 +32,11 @@ public class FilmContent extends BaseEntity implements Serializable {
     private String filmId;
 
     /**
+     * 线路类型
+     */
+    private String type;
+
+    /**
      * 影视视频名称
      */
     private String name;
