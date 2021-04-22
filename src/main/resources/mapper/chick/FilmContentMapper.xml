@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xkx.chick.web.mapper.FilmContentMapper">
 
+    <select id="getContentListByFilmId" resultType="com.xkx.chick.web.pojo.entity.FilmContent">
+        select * from chick_film_content where film_id = #{filmId}
+    </select>
 </mapper>

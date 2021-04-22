@@ -1,7 +1,9 @@
 package com.xkx.chick.web.mapper;
 
-import com.xkx.chick.web.pojo.entity.FilmContent;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xkx.chick.web.pojo.entity.FilmContent;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface FilmContentMapper extends BaseMapper<FilmContent> {
 
+    List<FilmContent> getContentListByFilmId(String filmId);
 }
