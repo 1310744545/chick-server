@@ -4,7 +4,6 @@ package com.xkx.chick.web.controller;
 import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.controller.BaseController;
 import com.xkx.chick.common.util.StringUtils;
-import com.xkx.chick.web.pojo.entity.FilmContent;
 import com.xkx.chick.web.service.IFilmContentService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>
@@ -48,11 +46,11 @@ public class FilmContentController extends BaseController {
             @ApiImplicitParam(paramType = "filmId", name = "filmId", value = "电影id", required = true),
     })
     @GetMapping("/getContentListByFilmId")
-    public R<List<FilmContent>> getContentListByFilmId(String filmId) {
+    public R getContentListByFilmId(String filmId) {
         if (!StringUtils.isNotBlank(filmId)) {
             return R.failed("电影id为空");
         }
-        return R.ok(filmContentService.getContentListByFilmId(filmId));
+        return filmContentService.getContentListByFilmId(filmId);
     }
 
 

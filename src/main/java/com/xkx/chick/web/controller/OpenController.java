@@ -113,11 +113,11 @@ public class OpenController {
             String span = element.select("span").text();
             if (ObjectUtils.isNotEmpty(element)) {
                 //更新
-                if (element.select("span").text().contains("更新:")) {
-                    if (element.text().split(":").length > 1) {
-                        film.setFilmUpdateTime(element.text().split(":")[1]);
-                    }
-                }
+//                if (element.select("span").text().contains("更新:")) {
+//                    if (element.text().split(":").length > 1) {
+//                        film.setUpdateDate(element.text().split(":")[1]);
+//                    }
+//                }
                 //状态
                 if (element.select("span").text().contains("状态:")) {
                     if (element.text().split(":").length > 1) {
@@ -203,7 +203,7 @@ public class OpenController {
                 //播放支持
                 if (element.select("span").text().contains("播放支持:")) {
                     if (element.text().split(":").length > 1) {
-                        film.setFilmUpdateTime(element.text().split(":")[1]);
+                        film.setPlayerSupport(element.text().split(":")[1]);
                     }
                 }
             }

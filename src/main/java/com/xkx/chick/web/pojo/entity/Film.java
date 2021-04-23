@@ -132,7 +132,7 @@ public class Film extends BaseEntity implements Serializable {
 
 
     /**
-     * 电影更新时间
+     * 播放支持
      */
-    private String filmUpdateTime;
+    private String playerSupport;
 }

@@ -1,6 +1,7 @@
 package com.xkx.chick.web.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xkx.chick.common.base.R;
 import com.xkx.chick.web.mapper.FilmContentMapper;
 import com.xkx.chick.web.mapper.FilmMapper;
 import com.xkx.chick.web.pojo.entity.Film;
@@ -30,7 +31,12 @@ public class FilmContentServiceImpl extends ServiceImpl<FilmContentMapper, FilmC
     }
 
     @Override
-    public List<FilmContent> getContentListByFilmId(String filmId) {
-        return baseMapper.getContentListByFilmId(filmId);
+    public R getContentListByFilmId(String filmId) {
+        List<FilmContent> contentListByFilmId = baseMapper.getContentListByFilmId(filmId);
+        for (FilmContent filmContent : contentListByFilmId){
+             
+        }
+
+        return R.ok();
     }
 }

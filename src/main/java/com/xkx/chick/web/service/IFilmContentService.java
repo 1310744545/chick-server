@@ -1,10 +1,9 @@
 package com.xkx.chick.web.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xkx.chick.common.base.R;
 import com.xkx.chick.web.pojo.entity.Film;
 import com.xkx.chick.web.pojo.entity.FilmContent;
-
-import java.util.List;
 
 /**
  * <p>
@@ -30,5 +29,5 @@ public interface IFilmContentService extends IService<FilmContent> {
      * @param filmId 电影id
      * @return R
      */
-    List<FilmContent> getContentListByFilmId(String filmId);
+    R getContentListByFilmId(String filmId);
 }

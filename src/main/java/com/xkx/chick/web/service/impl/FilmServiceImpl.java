@@ -32,7 +32,7 @@ public class FilmServiceImpl extends ServiceImpl<FilmMapper, Film> implements IF
     @Override
     public Page<Film> list(Page<Film> validPage, String keyword, String type, String delFlag) {
         LambdaQueryWrapper<Film> wrapper = Wrappers.<Film>lambdaQuery()
-                .select(Film::getName, Film::getId, Film::getScore, Film::getCoverUrl, Film::getFilmUpdateTime)
+                .select(Film::getName, Film::getId, Film::getScore, Film::getCoverUrl, Film::getUpdateDate)
                 .eq(Film::getDelFlag, delFlag)
                 .orderByDesc(Film::getCreateDate);
         if (StringUtils.isNotBlank(keyword)) {
