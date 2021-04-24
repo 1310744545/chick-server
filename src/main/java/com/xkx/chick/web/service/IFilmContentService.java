@@ -29,5 +29,13 @@ public interface IFilmContentService extends IService<FilmContent> {
      * @param filmId 电影id
      * @return R
      */
-    R getContentListByFilmId(String filmId);
+    R getContentListByFilmId(String filmId, String type);
+
+    /**
+     * 获取软件详细信息
+     *
+     * @param filmContentId 电影内容id
+     * @return R
+     */
+    R contentById(String filmContentId);
 }

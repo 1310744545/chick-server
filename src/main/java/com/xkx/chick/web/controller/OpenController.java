@@ -55,16 +55,27 @@ public class OpenController {
     private FilmContentMapper filmContentMapper;
 
 
-    @GetMapping("/catchFilmInfo")
+    @GetMapping("/updateFilmInfo")
     public void catchFilmInfo() {
         int index = 1;
         //前缀
         String pre = "https://www.91mjw.cc";
         //获取所有类型
         List<Zdx> zdxs = zdxMapper.selectByZdId("ccfb98c8-0299-48cd-adf6-43d9a3255513");
-        for(int i =17; i<= 74 ; i++){
+        //最后一页
+        int lastPage;
+        Document documentPage = Jsoup.parse(pre + "/meiju/1.html");
+        String lastPageString = documentPage.select(".next-page + li").toString();
+        lastPage = Integer.parseInt(lastPageString.split("-")[1].split("\\.")[0]);
+        for (int i = 1; i <= lastPage; i++) {
+            String page;
+            if (i == 1) {
+                page = "";
+            } else {
+                page = "-" + i;
+            }
             /*处理美剧结束*/
-            String s = HttpUtil.get("https://www.91mjw.cc/meiju/1-"+i+".html");
+            String s = HttpUtil.get("https://www.91mjw.cc/meiju/1" + page + ".html");
             Document document = Jsoup.parse(s);
             Elements elements = document.select(".m-movies .u-movie > a");
             for (Element element : elements) {
@@ -84,12 +95,30 @@ public class OpenController {
                 insertDB(film, filmContents);
                 System.out.println("===========================处理完成第" + index + "个美剧==========================");
                 System.out.println();
-                System.out.println( );
+                System.out.println();
                 index++;
             }
         }
     }
 
+    @GetMapping("/updateOne")
+    public void catchFilmInfo(String url) {
+        //前缀
+        String pre = "https://www.91mjw.cc";
+        //获取所有类型
+        List<Zdx> zdxs = zdxMapper.selectByZdId("ccfb98c8-0299-48cd-adf6-43d9a3255513");
+        /*处理美剧开始*/
+        String s2 = HttpUtil.get(url);
+        Document document2 = Jsoup.parse(s2);
+        //创建一个美剧
+        Film film = new Film();
+        //处理封面,标题,信息,评分,简介
+        film = titleAndInfo(film, document2, pre, zdxs);
+//        //处理美剧内容
+//        List<FilmContent> filmContents = filmContent(film, document2, pre);
+//        //插入数据库
+//        insertDB(film, filmContents);
+    }
 
     //处理封面,标题,信息,评分,简介
     private Film titleAndInfo(Film film, Document document, String pre, List<Zdx> zdxs) {
@@ -110,14 +139,13 @@ public class OpenController {
         Elements infoResult = document.select(".video_info li");
         film.setId(UUID.randomUUID().toString());
         for (Element element : infoResult) {
-            String span = element.select("span").text();
             if (ObjectUtils.isNotEmpty(element)) {
                 //更新
-//                if (element.select("span").text().contains("更新:")) {
-//                    if (element.text().split(":").length > 1) {
-//                        film.setUpdateDate(element.text().split(":")[1]);
-//                    }
-//                }
+                if (element.select("span").text().contains("更新:")) {
+                    if (element.text().split(":").length > 1) {
+                        film.setFilmUpdateTime(element.text().split(":")[1]);
+                    }
+                }
                 //状态
                 if (element.select("span").text().contains("状态:")) {
                     if (element.text().split(":").length > 1) {
@@ -301,8 +329,8 @@ public class OpenController {
         for (Element element : elementss) {
             if (element.select("strong").text().contains("迅雷下载")) {
                 String string = element.select("div div div div ul script").get(1).toString();
-                if (StringUtils.isNotEmpty(string)){
-                    if (string.contains("GvodUrls1")){
+                if (StringUtils.isNotEmpty(string)) {
+                    if (string.contains("GvodUrls1")) {
                         String s = string.split("var GvodUrls1 = \"")[1];
                         String s1 = s.split("\";echoDown")[0];
                         String[] split = s1.split("###");
@@ -317,7 +345,7 @@ public class OpenController {
                             filmContents.add(filmContent);
                         }
                     }
-                    if (string.contains("GvodUrls2")){
+                    if (string.contains("GvodUrls2")) {
                         String s = string.split("var GvodUrls2 = \"")[1];
                         String s1 = s.split("\";echoDown")[0];
                         String[] split = s1.split("###");
@@ -340,7 +368,7 @@ public class OpenController {
     }
 
     //插入数据库
-    private void insertDB(Film film, List<FilmContent> filmContents){
+    private void insertDB(Film film, List<FilmContent> filmContents) {
         System.out.println("=============================开始插入数据============================");
         Film filmQuery = filmMapper.selectOne(Wrappers.<Film>lambdaQuery()
                 .eq(Film::getName, film.getName()));
@@ -355,8 +383,10 @@ public class OpenController {
                         .eq(FilmContent::getUrl, filmContent.getUrl()));
                 if (ObjectUtils.isNotEmpty(filmContentQuery)) {
                     filmContent.setId(filmContentQuery.getId());
+                    filmContent.setFilmId(filmQuery.getId());
                     filmContentMapper.updateById(filmContent);
                 } else {
+                    filmContent.setFilmId(filmQuery.getId());
                     filmContentMapper.insert(filmContent);
                 }
             }

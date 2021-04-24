@@ -39,7 +39,7 @@ public class FilmServiceImpl extends ServiceImpl<FilmMapper, Film> implements IF
             wrapper.and(wr -> wr.like(Film::getName, keyword));
         }
         if (StringUtils.isNotBlank(type)) {
-            wrapper.and(wr -> wr.in(Film::getType, type));
+            wrapper.and(wr -> wr.like(Film::getTag, type));
         }
         return baseMapper.selectPage(validPage, wrapper);
     }

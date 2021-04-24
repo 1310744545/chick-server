@@ -3,6 +3,18 @@
 <mapper namespace="com.xkx.chick.web.mapper.FilmContentMapper">
 
     <select id="getContentListByFilmId" resultType="com.xkx.chick.web.pojo.entity.FilmContent">
-        select * from chick_film_content where film_id = #{filmId}
+        select
+        *
+        from chick_film_content
+        <where>
+            film_id = #{filmId}
+            <if test="type != '' and type != null">
+                and `type` = #{type}
+            </if>
+            <if test="type == '' or type == null">
+                and `type` !=  'foreShow' and  `type` !=  'download'
+            </if>
+            order by name
+        </where>
     </select>
 </mapper>

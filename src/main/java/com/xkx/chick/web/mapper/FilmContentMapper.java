@@ -15,5 +15,5 @@ import java.util.List;
  */
 public interface FilmContentMapper extends BaseMapper<FilmContent> {
 
-    List<FilmContent> getContentListByFilmId(String filmId);
+    List<FilmContent> getContentListByFilmId(String filmId, String type);
 }
