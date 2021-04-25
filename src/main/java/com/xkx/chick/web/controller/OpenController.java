@@ -373,7 +373,9 @@ public class OpenController {
         Film filmQuery = filmMapper.selectOne(Wrappers.<Film>lambdaQuery()
                 .eq(Film::getName, film.getName()));
         if (ObjectUtils.isNotEmpty(filmQuery)) {
+            //存在时的操作 将查询到的主键赋值
             film.setId(filmQuery.getId());
+            //更新
             filmMapper.updateById(film);
             for (FilmContent filmContent : filmContents) {
                 FilmContent filmContentQuery = filmContentMapper.selectOne(Wrappers.<FilmContent>lambdaQuery()
