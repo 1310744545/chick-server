@@ -16,15 +16,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * <p>
@@ -60,14 +61,14 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query"),
     })
     @PostMapping("/login")
-    public R login(String username, String password, String code, HttpServletRequest request) {
+    public R login(String username, String password,String captchaText, String code, HttpServletRequest request) {
         if (StringUtils.isAnyBlank(username, password)) {
             return R.failed("用户名和密码不能为空");
         }
         if (StringUtils.isAnyBlank(code)) {
             return R.failed("验证码不能为空");
         }
-        return userService.login(username, password, code, request);
+        return userService.login(username, password, captchaText, code, request);
     }
 
     /**
@@ -107,30 +108,35 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "验证码", httpMethod = "GET")
     @GetMapping("/captcha")
-    public void captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        byte[] captcha;
+    public R captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        byte[] captcha;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-
+        HashMap<String, String> result = new HashMap<>();
         try {
             // 将生成的验证码保存在session中
-            String createText = defaultKaptcha.createText();
-            request.getSession().setAttribute("rightCode", createText);
-            BufferedImage bi = defaultKaptcha.createImage(createText);
+            String text = defaultKaptcha.createText();
+            request.getSession().setAttribute("rightCode", text);
+            BufferedImage bi = defaultKaptcha.createImage(text);
             ImageIO.write(bi, "jpg", out);
+            BASE64Encoder encoder = new BASE64Encoder();
+            String encode = encoder.encode(out.toByteArray());
+            result.put("text",text);
+            result.put("captchaBase64",encode);
+            return R.ok(result);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
+            return R.failed();
         }
 
-        captcha = out.toByteArray();
-        response.setHeader("Cache-Control", "no-store");
-        response.setHeader("Pragma", "no-cache");
-        response.setDateHeader("Expires", 0);
-        response.setContentType("image/jpeg");
-        ServletOutputStream sout = response.getOutputStream();
-        sout.write(captcha);
-        sout.flush();
-        sout.close();
+//        captcha = out.toByteArray();
+//        response.setHeader("Cache-Control", "no-store");
+//        response.setHeader("Pragma", "no-cache");
+//        response.setDateHeader("Expires", 0);
+//        response.setContentType("image/jpeg");
+//        ServletOutputStream sout = response.getOutputStream();
+//        sout.write(captcha);
+//        sout.flush();
+//        sout.close();
     }
 
     /**

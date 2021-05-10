@@ -6,6 +6,7 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.xkx.chick.common.base.R;
 import com.xkx.chick.common.constant.CommonConstants;
 import com.xkx.chick.common.constant.OSSClientConstants;
 import com.xkx.chick.common.util.AliyunOSSClientUtil;
@@ -102,7 +103,7 @@ public class OpenController {
     }
 
     @GetMapping("/updateOne")
-    public void catchFilmInfo(String url) {
+    public R catchFilmInfo(String url) {
         //前缀
         String pre = "https://www.91mjw.cc";
         //获取所有类型
@@ -114,10 +115,11 @@ public class OpenController {
         Film film = new Film();
         //处理封面,标题,信息,评分,简介
         film = titleAndInfo(film, document2, pre, zdxs);
-//        //处理美剧内容
-//        List<FilmContent> filmContents = filmContent(film, document2, pre);
-//        //插入数据库
-//        insertDB(film, filmContents);
+        //处理美剧内容
+        List<FilmContent> filmContents = filmContent(film, document2, pre);
+        //插入数据库
+        insertDB(film, filmContents);
+        return R.ok();
     }
 
     //处理封面,标题,信息,评分,简介
@@ -269,7 +271,7 @@ public class OpenController {
             ossClient.shutdown();
             //获取地址
             url = OSSClientConstants.URL_HEAD + "filmFiles/" + title + "/" + title + ".jpg";
-            //插入文件表
+            //插入文件表 如果存在则更新地址
             SysFile sysFile = fileMapper.selectOne(Wrappers.<SysFile>lambdaQuery()
                     .eq(SysFile::getMd5key, md5key)
                     .eq(SysFile::getDelFlag, CommonConstants.DELETE_FLAG));
@@ -277,6 +279,11 @@ public class OpenController {
                 String uuid = UUID.randomUUID().toString();
                 SysFile sysfile = new SysFile(uuid, md5key, title + ".jpg", "a073ab64-6237-4c0c-860a-74e391ff4c51", url, title + ".jpg", contentLength);
                 if (fileMapper.insert(sysfile) > 0) {
+                    return url;
+                }
+            }else {
+                sysFile.setUrl(url);
+                if (fileMapper.updateById(sysFile) > 0){
                     return url;
                 }
             }

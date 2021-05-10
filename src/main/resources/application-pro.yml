@@ -1,0 +1,59 @@
+jwt:
+  header: Authorization
+  secret: xkxxkx
+  #token有效期三十天
+  expiration: 2592000000
+  #  expiration: 10000
+  head: "Bearer "
+
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: qq10086..
+      url: jdbc:mysql://127.0.0.1:3306/chick?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true&autoReconnect=true
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: root
+        login-password: qq10086..
+        allow:
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 10000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+  servlet:
+    multipart:
+      max-file-size: 31MB
+      max-request-size: 31MB
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: 1
+        max-idle: 8
+        min-idle: 0
+
+logging:
+  #优先级从高到低分别是 ERROR、WARN、INFO、DEBUG
+  level:
+    root: INFO
+    com.xkx: DEBUG
+    org.springframework.boot.autoconfigure: INFO
+    com.xkx.chick.Application: INFO
+    org.thymeleaf: INFO
+
+alioss:
+  endpoint: oss-cn-beijing.aliyuncs.com
+  bucketName: chickweb
+  headPortrait: headPortrait/

@@ -120,10 +120,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      * @param request
      */
     @Override
-    public R<HashMap> login(String username, String password, String code, HttpServletRequest request) {
+    public R<HashMap> login(String username, String password, String captchaText, String code, HttpServletRequest request) {
         //校验验证码
-        String rightCode = (String) request.getSession().getAttribute("rightCode");
-        if (StringUtils.isEmpty(rightCode) || !rightCode.equalsIgnoreCase(code)) {
+//        String rightCode = (String) request.getSession().getAttribute("rightCode");
+//        if (StringUtils.isEmpty(rightCode) || !rightCode.equalsIgnoreCase(code)) {
+//            return R.failed("验证码输入错误,请重新输入");
+//        }
+        if(!code.equals(captchaText)){
             return R.failed("验证码输入错误,请重新输入");
         }
         //构造token

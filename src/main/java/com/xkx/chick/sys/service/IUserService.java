@@ -49,7 +49,7 @@ public interface IUserService extends IService<User> {
      * @param request
      * @return
      */
-    R login(String username, String password, String code, HttpServletRequest request);
+    R login(String username, String password, String captchaText, String code, HttpServletRequest request);
 
     /**
      * 用户注册
